@@ -181,21 +181,30 @@ export default function Home() {
                   />
                 </Container>
 
-                <Container
-                  header={<Header variant="h2">Skill Gaps</Header>}
-                >
-                  {roadmapData.skill_gaps.length > 0 ? (
+                {roadmapData.skill_gaps.length > 0 && (
+                  <Container
+                    header={
+                      <Header 
+                        variant="h2"
+                        info={<span>Skills you need to develop for this role</span>}
+                      >
+                        Skill Gaps ({roadmapData.skill_gaps.length})
+                      </Header>
+                    }
+                  >
                     <SpaceBetween size="xs">
                       {roadmapData.skill_gaps.map((gap: any, i: number) => (
-                        <div key={i}>
+                        <div key={i} style={{
+                          padding: "8px",
+                          background: gap.priority === "high" ? "#fff3e0" : "#f3e5f5",
+                          borderRadius: "4px"
+                        }}>
                           <strong>{gap.skill}</strong> - {gap.priority} priority ({gap.time_months} months)
                         </div>
                       ))}
                     </SpaceBetween>
-                  ) : (
-                    <div>No skill gaps identified! You're well-matched for this role.</div>
-                  )}
-                </Container>
+                  </Container>
+                )}
 
                 <Container
                   header={<Header variant="h2">Recommended Courses</Header>}
