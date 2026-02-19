@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import {
   ReactFlow,
   Background,
@@ -19,11 +19,10 @@ interface RoadmapCanvasProps {
   edges: Edge[];
 }
 
-export default function RoadmapCanvas({ nodes, edges }: RoadmapCanvasProps) {
+const RoadmapCanvas = memo(function RoadmapCanvas({ nodes, edges }: RoadmapCanvasProps) {
   const [nodesState, setNodes, onNodesChange] = useNodesState(nodes);
   const [edgesState, setEdges, onEdgesChange] = useEdgesState(edges);
 
-  // Update nodes and edges when props change
   useEffect(() => {
     setNodes(nodes);
   }, [nodes, setNodes]);
@@ -50,4 +49,6 @@ export default function RoadmapCanvas({ nodes, edges }: RoadmapCanvasProps) {
       </ReactFlow>
     </div>
   );
-}
+});
+
+export default RoadmapCanvas;

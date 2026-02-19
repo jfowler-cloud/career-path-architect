@@ -60,8 +60,12 @@ export default function Home() {
 
     setLoading(true);
     setError("");
+    setRoadmapData(null); // Clear previous results
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
       const response = await fetch(`${API_URL}/api/roadmaps/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,8 +73,11 @@ export default function Home() {
           resume_text: resumeText,
           target_jobs: [targetJob],
           user_id: "demo"
-        })
+        }),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ detail: "Failed to generate roadmap" }));
@@ -80,7 +87,11 @@ export default function Home() {
       const data = await response.json();
       setRoadmapData(data);
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      if (err.name === 'AbortError') {
+        setError("Request timed out. Please try again.");
+      } else {
+        setError(err.message || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }
