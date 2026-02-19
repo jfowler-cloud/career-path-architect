@@ -15,12 +15,37 @@ import RoadmapCanvas from "@/components/RoadmapCanvas";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+const EXAMPLE_RESUME = `Senior Software Engineer with 5 years of experience in full-stack development.
+
+Skills:
+- Python, JavaScript, TypeScript
+- React, Node.js, FastAPI
+- AWS (EC2, S3, Lambda)
+- Docker, Kubernetes
+- PostgreSQL, MongoDB
+
+Experience:
+- Built scalable web applications serving 100K+ users
+- Implemented CI/CD pipelines with GitHub Actions
+- Led team of 3 developers on microservices project
+- Reduced API response time by 40% through optimization
+
+Education:
+- BS Computer Science, State University
+`;
+
 export default function Home() {
   const [resumeText, setResumeText] = useState("");
   const [targetJob, setTargetJob] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [roadmapData, setRoadmapData] = useState<any>(null);
+
+  const loadExample = () => {
+    setResumeText(EXAMPLE_RESUME);
+    setTargetJob("Senior Cloud Architect");
+    setError("");
+  };
 
   const handleGenerate = async () => {
     if (!resumeText || !targetJob) {
@@ -92,6 +117,15 @@ export default function Home() {
               <SpaceBetween size="m">
                 {error && <Alert type="error">{error}</Alert>}
                 
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <strong>Try it out:</strong>
+                  </div>
+                  <Button onClick={loadExample} variant="link">
+                    Load Example Resume
+                  </Button>
+                </div>
+
                 <Textarea
                   label="Resume"
                   placeholder="Paste your resume here..."

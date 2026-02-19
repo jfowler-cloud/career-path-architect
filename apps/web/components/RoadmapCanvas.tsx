@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useEffect } from "react";
 import {
   ReactFlow,
   Background,
@@ -10,6 +10,7 @@ import {
   Edge,
   useNodesState,
   useEdgesState,
+  BackgroundVariant,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -19,21 +20,33 @@ interface RoadmapCanvasProps {
 }
 
 export default function RoadmapCanvas({ nodes, edges }: RoadmapCanvasProps) {
-  const [nodesState, , onNodesChange] = useNodesState(nodes);
-  const [edgesState, , onEdgesChange] = useEdgesState(edges);
+  const [nodesState, setNodes, onNodesChange] = useNodesState(nodes);
+  const [edgesState, setEdges, onEdgesChange] = useEdgesState(edges);
+
+  // Update nodes and edges when props change
+  useEffect(() => {
+    setNodes(nodes);
+  }, [nodes, setNodes]);
+
+  useEffect(() => {
+    setEdges(edges);
+  }, [edges, setEdges]);
 
   return (
-    <div style={{ width: "100%", height: "600px" }}>
+    <div style={{ width: "100%", height: "600px", border: "1px solid #ddd", borderRadius: "8px" }}>
       <ReactFlow
         nodes={nodesState}
         edges={edgesState}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitView
+        fitViewOptions={{ padding: 0.2 }}
+        minZoom={0.5}
+        maxZoom={1.5}
       >
-        <Background />
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         <Controls />
-        <MiniMap />
+        <MiniMap zoomable pannable />
       </ReactFlow>
     </div>
   );

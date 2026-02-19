@@ -38,6 +38,33 @@ Content-Type: application/json
 }
 ```
 
+## Testing
+
+### Test Workflow
+
+```bash
+cd apps/backend
+uv run python test_workflow.py
+```
+
+This will test the complete LangGraph workflow with example data.
+
+### Manual API Test
+
+```bash
+# Health check
+curl http://localhost:8000/health
+
+# Generate roadmap
+curl -X POST http://localhost:8000/api/roadmaps/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resume_text": "Senior Software Engineer with 5 years Python and AWS experience",
+    "target_jobs": ["Cloud Solutions Architect"],
+    "user_id": "demo"
+  }'
+```
+
 ## Architecture
 
 ### LangGraph Workflow
