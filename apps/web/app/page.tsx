@@ -13,6 +13,8 @@ import Alert from "@cloudscape-design/components/alert";
 
 import RoadmapCanvas from "@/components/RoadmapCanvas";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function Home() {
   const [resumeText, setResumeText] = useState("");
   const [targetJob, setTargetJob] = useState("");
@@ -26,11 +28,16 @@ export default function Home() {
       return;
     }
 
+    if (resumeText.length < 50) {
+      setError("Resume must be at least 50 characters");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/roadmaps/generate", {
+      const response = await fetch(`${API_URL}/api/roadmaps/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -40,12 +47,15 @@ export default function Home() {
         })
       });
 
-      if (!response.ok) throw new Error("Failed to generate roadmap");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: "Failed to generate roadmap" }));
+        throw new Error(errorData.detail || "Failed to generate roadmap");
+      }
 
       const data = await response.json();
       setRoadmapData(data);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -122,38 +132,52 @@ export default function Home() {
                 <Container
                   header={<Header variant="h2">Skill Gaps</Header>}
                 >
-                  <SpaceBetween size="xs">
-                    {roadmapData.skill_gaps.map((gap: any, i: number) => (
-                      <div key={i}>
-                        <strong>{gap.skill}</strong> - {gap.priority} priority ({gap.time_months} months)
-                      </div>
-                    ))}
-                  </SpaceBetween>
+                  {roadmapData.skill_gaps.length > 0 ? (
+                    <SpaceBetween size="xs">
+                      {roadmapData.skill_gaps.map((gap: any, i: number) => (
+                        <div key={i}>
+                          <strong>{gap.skill}</strong> - {gap.priority} priority ({gap.time_months} months)
+                        </div>
+                      ))}
+                    </SpaceBetween>
+                  ) : (
+                    <div>No skill gaps identified! You're well-matched for this role.</div>
+                  )}
                 </Container>
 
                 <Container
                   header={<Header variant="h2">Recommended Courses</Header>}
                 >
-                  <SpaceBetween size="xs">
-                    {roadmapData.courses.map((course: any, i: number) => (
-                      <div key={i}>
-                        <strong>{course.name}</strong> - {course.provider} ({course.duration})
-                      </div>
-                    ))}
-                  </SpaceBetween>
+                  {roadmapData.courses.length > 0 ? (
+                    <SpaceBetween size="xs">
+                      {roadmapData.courses.map((course: any, i: number) => (
+                        <div key={i}>
+                          <strong>{course.name}</strong> - {course.provider} ({course.duration})
+                          {course.url && <div><a href={course.url} target="_blank" rel="noopener noreferrer">View Course</a></div>}
+                        </div>
+                      ))}
+                    </SpaceBetween>
+                  ) : (
+                    <div>No course recommendations available.</div>
+                  )}
                 </Container>
 
                 <Container
                   header={<Header variant="h2">Project Ideas</Header>}
                 >
-                  <SpaceBetween size="xs">
-                    {roadmapData.projects.map((project: any, i: number) => (
-                      <div key={i}>
-                        <strong>{project.name}</strong>
-                        <p>{project.description}</p>
-                      </div>
-                    ))}
-                  </SpaceBetween>
+                  {roadmapData.projects.length > 0 ? (
+                    <SpaceBetween size="xs">
+                      {roadmapData.projects.map((project: any, i: number) => (
+                        <div key={i}>
+                          <strong>{project.name}</strong>
+                          <p>{project.description}</p>
+                          {project.skills && <div><em>Skills: {project.skills.join(", ")}</em></div>}
+                        </div>
+                      ))}
+                    </SpaceBetween>
+                  ) : (
+                    <div>No project recommendations available.</div>
+                  )}
                 </Container>
               </>
             )}
