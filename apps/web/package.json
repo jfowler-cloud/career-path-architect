@@ -12,6 +12,7 @@
     "@cloudscape-design/components": "^3.0.1203",
     "@cloudscape-design/global-styles": "^1.0.30",
     "@xyflow/react": "^12.3.5",
+    "html-to-image": "^1.11.13",
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

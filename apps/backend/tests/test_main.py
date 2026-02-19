@@ -4,9 +4,17 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from career_path.main import app
+from career_path.progress import progress_tracker
 
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def reset_progress_tracker():
+    """Reset progress tracker before each test."""
+    progress_tracker._progress.clear()
+    yield
 
 
 def test_health_endpoint():
@@ -185,3 +193,165 @@ def test_logging_configured():
     import logging
     logger = logging.getLogger("career_path.main")
     assert logger is not None
+
+
+def test_create_progress():
+    """Test creating progress tracking."""
+    response = client.post(
+        "/api/roadmaps/roadmap-123/progress",
+        json=["Python", "AWS", "Docker"]
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["roadmap_id"] == "roadmap-123"
+    assert data["total_skills"] == 3
+    assert "created_at" in data
+
+
+def test_get_progress_not_found():
+    """Test getting nonexistent progress."""
+    response = client.get("/api/roadmaps/nonexistent/progress")
+    assert response.status_code == 404
+
+
+def test_get_progress_success():
+    """Test getting progress."""
+    # Create progress first
+    client.post("/api/roadmaps/roadmap-123/progress", json=["Python", "AWS"])
+    
+    response = client.get("/api/roadmaps/roadmap-123/progress")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["roadmap_id"] == "roadmap-123"
+    assert data["completion_percentage"] == 0.0
+    assert data["statistics"]["not_started"] == 2
+    assert "Python" in data["skills"]
+    assert "AWS" in data["skills"]
+
+
+def test_update_skill_progress_success():
+    """Test updating skill progress."""
+    # Create progress first
+    client.post("/api/roadmaps/roadmap-123/progress", json=["Python"])
+    
+    response = client.patch(
+        "/api/roadmaps/roadmap-123/skills/Python",
+        json={"skill": "Python", "status": "in_progress", "notes": "Started learning"}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["skill"] == "Python"
+    assert data["status"] == "in_progress"
+    assert data["notes"] == "Started learning"
+    assert data["started_at"] is not None
+    assert data["roadmap_completion"] == 0.0
+
+
+def test_update_skill_progress_to_completed():
+    """Test completing a skill."""
+    client.post("/api/roadmaps/roadmap-123/progress", json=["Python", "AWS"])
+    
+    response = client.patch(
+        "/api/roadmaps/roadmap-123/skills/Python",
+        json={"skill": "Python", "status": "completed", "notes": "Done!"}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "completed"
+    assert data["completed_at"] is not None
+    assert data["roadmap_completion"] == 50.0
+
+
+def test_update_skill_progress_not_found():
+    """Test updating nonexistent skill."""
+    response = client.patch(
+        "/api/roadmaps/roadmap-123/skills/Python",
+        json={"skill": "Python", "status": "completed"}
+    )
+    assert response.status_code == 404
+
+
+def test_update_skill_progress_invalid_status():
+    """Test updating with invalid status."""
+    client.post("/api/roadmaps/roadmap-123/progress", json=["Python"])
+    
+    response = client.patch(
+        "/api/roadmaps/roadmap-123/skills/Python",
+        json={"skill": "Python", "status": "invalid_status"}
+    )
+    assert response.status_code == 422
+
+
+def test_progress_workflow_integration():
+    """Test full progress tracking workflow."""
+    # Create roadmap progress
+    create_response = client.post(
+        "/api/roadmaps/roadmap-456/progress",
+        json=["Python", "AWS", "Docker"]
+    )
+    assert create_response.status_code == 200
+    
+    # Start first skill
+    client.patch(
+        "/api/roadmaps/roadmap-456/skills/Python",
+        json={"skill": "Python", "status": "in_progress"}
+    )
+    
+    # Complete first skill
+    client.patch(
+        "/api/roadmaps/roadmap-456/skills/Python",
+        json={"skill": "Python", "status": "completed"}
+    )
+    
+    # Start second skill
+    client.patch(
+        "/api/roadmaps/roadmap-456/skills/AWS",
+        json={"skill": "AWS", "status": "in_progress"}
+    )
+    
+    # Check progress
+    progress_response = client.get("/api/roadmaps/roadmap-456/progress")
+    assert progress_response.status_code == 200
+    data = progress_response.json()
+    
+    assert data["completion_percentage"] == pytest.approx(33.33, rel=0.1)
+    assert data["statistics"]["completed"] == 1
+    assert data["statistics"]["in_progress"] == 1
+    assert data["statistics"]["not_started"] == 1
+    assert data["skills"]["Python"]["status"] == "completed"
+    assert data["skills"]["AWS"]["status"] == "in_progress"
+    assert data["skills"]["Docker"]["status"] == "not_started"
+
+
+def test_compare_paths_endpoint():
+    """Test career path comparison endpoint."""
+    response = client.post("/api/compare-paths", json={
+        "current_skills": ["Python", "Git"],
+        "path1_skills": ["Python", "AWS", "Docker"],
+        "path2_skills": ["Python", "Azure", "Kubernetes"],
+        "path1_name": "AWS DevOps",
+        "path2_name": "Azure DevOps"
+    })
+    
+    assert response.status_code == 200
+    data = response.json()
+    
+    assert "paths" in data
+    assert "AWS DevOps" in data["paths"]
+    assert "Azure DevOps" in data["paths"]
+    assert "common_gaps" in data
+    assert "recommendation" in data
+    
+    # Check learning effort is included
+    assert "learning_effort" in data["paths"]["AWS DevOps"]
+    assert "estimated_hours" in data["paths"]["AWS DevOps"]["learning_effort"]
+
+
+def test_compare_paths_validation_error():
+    """Test comparison with invalid input."""
+    response = client.post("/api/compare-paths", json={
+        "current_skills": [],  # Empty not allowed
+        "path1_skills": ["Python"],
+        "path2_skills": ["Java"]
+    })
+    assert response.status_code == 422
