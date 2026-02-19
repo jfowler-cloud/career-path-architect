@@ -6,6 +6,7 @@ from unittest.mock import Mock, patch
 from career_path.main import app
 from career_path.progress import progress_tracker
 from career_path.cache import response_cache
+from career_path.rate_limit import rate_limiter
 
 
 client = TestClient(app)
@@ -16,6 +17,7 @@ def reset_state():
     """Reset state before each test."""
     progress_tracker._progress.clear()
     response_cache.clear()
+    rate_limiter.reset()
     yield
 
 
@@ -392,3 +394,13 @@ def test_cleanup_cache_endpoint():
     data = response.json()
     assert "removed" in data
     assert "stats" in data
+
+
+def test_rate_limit_stats_endpoint():
+    """Test rate limit stats endpoint."""
+    response = client.get("/api/rate-limit/stats")
+    assert response.status_code == 200
+    data = response.json()
+    assert "requests_last_minute" in data
+    assert "requests_last_hour" in data
+    assert "minute_remaining" in data

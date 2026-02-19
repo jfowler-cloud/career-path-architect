@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.requests import Request
 from pydantic import BaseModel, Field, field_validator
 
 from .graph.workflow import create_workflow
@@ -13,6 +14,7 @@ from .health import check_aws_credentials, check_bedrock_access
 from .progress import progress_tracker, SkillProgress
 from .comparison import compare_career_paths, calculate_learning_effort
 from .cache import response_cache
+from .rate_limit import rate_limiter
 
 # Configure logging
 logging.basicConfig(
@@ -117,8 +119,15 @@ async def cleanup_cache():
 
 
 @app.post("/api/roadmaps/generate", response_model=RoadmapResponse)
-async def generate_roadmap(request: RoadmapRequest):
+async def generate_roadmap(request: RoadmapRequest, req: Request):
     """Generate career roadmap."""
+    
+    # Rate limiting
+    client_ip = req.client.host if req.client else "unknown"
+    allowed, reason = rate_limiter.is_allowed(client_ip)
+    if not allowed:
+        raise HTTPException(status_code=429, detail=reason)
+    rate_limiter.record_request(client_ip)
     
     if not workflow:
         logger.error("Workflow not initialized")
@@ -270,3 +279,10 @@ async def compare_paths(request: ComparePathsRequest):
     comparison["paths"][request.path2_name]["learning_effort"] = path2_effort
     
     return comparison
+
+
+@app.get("/api/rate-limit/stats")
+async def get_rate_limit_stats(req: Request):
+    """Get rate limit stats for current IP."""
+    client_ip = req.client.host if req.client else "unknown"
+    return rate_limiter.get_stats(client_ip)
