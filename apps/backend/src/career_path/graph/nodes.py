@@ -1,6 +1,7 @@
 """Agent node implementations for career path workflow."""
 
 import json
+import os
 from typing import Any
 
 import boto3
@@ -8,7 +9,13 @@ from langchain_aws import ChatBedrock
 
 from ..graph.state import CareerPathState
 
-bedrock = boto3.client("bedrock-runtime")
+
+def _get_bedrock_client():
+    """Lazy load bedrock client."""
+    return boto3.client(
+        "bedrock-runtime",
+        region_name=os.getenv("AWS_REGION", "us-east-1")
+    )
 
 
 def resume_analyzer_node(state: CareerPathState) -> dict[str, Any]:
@@ -16,7 +23,7 @@ def resume_analyzer_node(state: CareerPathState) -> dict[str, Any]:
     
     llm = ChatBedrock(
         model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=bedrock,
+        client=_get_bedrock_client(),
     )
     
     prompt = f"""Analyze this resume and extract:
@@ -50,7 +57,7 @@ def job_parser_node(state: CareerPathState) -> dict[str, Any]:
     
     llm = ChatBedrock(
         model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=bedrock,
+        client=_get_bedrock_client(),
     )
     
     required_skills = {}
@@ -111,7 +118,7 @@ def learning_path_node(state: CareerPathState) -> dict[str, Any]:
     
     llm = ChatBedrock(
         model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=bedrock,
+        client=_get_bedrock_client(),
     )
     
     skills_needed = [gap["skill"] for gap in state["skill_gaps"][:5]]
