@@ -8,6 +8,8 @@ pnpm-debug.log*
 dist/
 build/
 *.tsbuildinfo
+.next/
+out/
 
 # CDK
 cdk.out/
@@ -41,6 +43,7 @@ env/
 .coverage
 htmlcov/
 *.egg-info/
+uv.lock
 
 # AWS
 .aws-sam/
@@ -60,3 +63,6 @@ temp/
 
 # OS
 Thumbs.db
+
+# Turbo
+.turbo/
