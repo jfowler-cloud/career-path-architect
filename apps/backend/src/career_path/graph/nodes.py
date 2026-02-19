@@ -12,6 +12,7 @@ from langchain_aws import ChatBedrock
 
 from ..graph.state import CareerPathState
 from ..constants import MODEL_ID, MAX_TOKENS, TEMPERATURE, MAX_RESUME_LENGTH, MAX_SKILL_GAPS
+from ..utils import deduplicate_skills, calculate_priority, estimate_learning_time
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +83,10 @@ Return JSON:
         
         logger.info(f"Extracted {len(result.get('skills', []))} skills")
         
+        skills = deduplicate_skills(result.get("skills", []))
+        
         return {
-            "current_skills": result.get("skills", []),
+            "current_skills": skills,
             "experience_years": result.get("experience", {}),
             "strengths": result.get("strengths", []),
             "workflow_status": "resume_analyzed"
@@ -141,15 +144,15 @@ def gap_analysis_node(state: CareerPathState) -> dict[str, Any]:
     
     for job_title, required in state["required_skills"].items():
         missing = [s for s in required if s.lower() not in current]
-        for skill in missing:
-            # Prioritize based on frequency across jobs
-            priority = "high" if len(missing) <= 3 else "medium"
+        for idx, skill in enumerate(missing):
+            priority = calculate_priority(idx + 1, len(missing))
+            time_months = estimate_learning_time(skill)
             gaps.append({
                 "skill": skill,
                 "for_job": job_title,
                 "priority": priority,
                 "difficulty": "medium",
-                "time_months": 3
+                "time_months": time_months
             })
     
     # Sort by priority then skill name
