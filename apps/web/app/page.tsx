@@ -157,9 +157,16 @@ export default function Home() {
                   onClick={handleGenerate}
                   loading={loading}
                   disabled={!resumeText || !targetJob}
+                  loadingText="Generating roadmap..."
                 >
                   Generate Roadmap
                 </Button>
+                
+                {loading && (
+                  <Alert type="info">
+                    This may take 30-60 seconds. AI is analyzing your resume and generating recommendations...
+                  </Alert>
+                )}
               </SpaceBetween>
             </Container>
 
