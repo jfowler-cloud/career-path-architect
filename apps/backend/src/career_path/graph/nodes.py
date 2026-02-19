@@ -11,6 +11,7 @@ import boto3
 from langchain_aws import ChatBedrock
 
 from ..graph.state import CareerPathState
+from ..constants import MODEL_ID, MAX_TOKENS, TEMPERATURE, MAX_RESUME_LENGTH, MAX_SKILL_GAPS
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +34,11 @@ def _get_bedrock_client():
 def _get_llm():
     """Get configured LLM instance."""
     return ChatBedrock(
-        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id=MODEL_ID,
         client=_get_bedrock_client(),
         model_kwargs={
-            "max_tokens": 2000,
-            "temperature": 0.3,
+            "max_tokens": MAX_TOKENS,
+            "temperature": TEMPERATURE,
         }
     )
 
@@ -69,8 +70,8 @@ def resume_analyzer_node(state: CareerPathState) -> dict[str, Any]:
 2. Years of experience per category
 3. Key strengths
 
-Resume (first 2000 chars):
-{state['resume_text'][:2000]}
+Resume (first {MAX_RESUME_LENGTH} chars):
+{state['resume_text'][:MAX_RESUME_LENGTH]}
 
 Return JSON:
 {{"skills": ["..."], "experience": {{"category": years}}, "strengths": ["..."]}}"""
@@ -176,7 +177,7 @@ def learning_path_node(state: CareerPathState) -> dict[str, Any]:
             "workflow_status": "learning_path_generated"
         }
     
-    skills_needed = [gap["skill"] for gap in state["skill_gaps"][:5]]
+    skills_needed = [gap["skill"] for gap in state["skill_gaps"][:MAX_SKILL_GAPS]]
     
     prompt = f"""For skills: {', '.join(skills_needed)}
 
