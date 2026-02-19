@@ -206,40 +206,61 @@ export default function Home() {
                   </Container>
                 )}
 
-                <Container
-                  header={<Header variant="h2">Recommended Courses</Header>}
-                >
-                  {roadmapData.courses.length > 0 ? (
-                    <SpaceBetween size="xs">
+                {roadmapData.courses.length > 0 && (
+                  <Container
+                    header={
+                      <Header 
+                        variant="h2"
+                        description="Recommended online courses to build missing skills"
+                      >
+                        Recommended Courses ({roadmapData.courses.length})
+                      </Header>
+                    }
+                  >
+                    <SpaceBetween size="s">
                       {roadmapData.courses.map((course: any, i: number) => (
-                        <div key={i}>
-                          <strong>{course.name}</strong> - {course.provider} ({course.duration})
-                          {course.url && <div><a href={course.url} target="_blank" rel="noopener noreferrer">View Course</a></div>}
+                        <div key={i} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
+                          <div><strong>{course.name}</strong></div>
+                          <div style={{color: "#666"}}>{course.provider} • {course.duration}</div>
+                          {course.url && (
+                            <div style={{marginTop: "4px"}}>
+                              <a href={course.url} target="_blank" rel="noopener noreferrer" style={{color: "#0073bb"}}>
+                                View Course →
+                              </a>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </SpaceBetween>
-                  ) : (
-                    <div>No course recommendations available.</div>
-                  )}
-                </Container>
+                  </Container>
+                )}
 
-                <Container
-                  header={<Header variant="h2">Project Ideas</Header>}
-                >
-                  {roadmapData.projects.length > 0 ? (
-                    <SpaceBetween size="xs">
+                {roadmapData.projects.length > 0 && (
+                  <Container
+                    header={
+                      <Header 
+                        variant="h2"
+                        description="Hands-on projects to practice and demonstrate skills"
+                      >
+                        Project Ideas ({roadmapData.projects.length})
+                      </Header>
+                    }
+                  >
+                    <SpaceBetween size="s">
                       {roadmapData.projects.map((project: any, i: number) => (
-                        <div key={i}>
-                          <strong>{project.name}</strong>
-                          <p>{project.description}</p>
-                          {project.skills && <div><em>Skills: {project.skills.join(", ")}</em></div>}
+                        <div key={i} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
+                          <div><strong>{project.name}</strong></div>
+                          <div style={{marginTop: "4px"}}>{project.description}</div>
+                          {project.skills && (
+                            <div style={{marginTop: "8px", color: "#666", fontSize: "0.9em"}}>
+                              Skills: {project.skills.join(", ")}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </SpaceBetween>
-                  ) : (
-                    <div>No project recommendations available.</div>
-                  )}
-                </Container>
+                  </Container>
+                )}
               </>
             )}
           </SpaceBetween>
