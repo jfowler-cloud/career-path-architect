@@ -218,30 +218,36 @@ def roadmap_generator_node(state: CareerPathState) -> dict[str, Any]:
     edges = []
     
     # Current state node
+    skills_count = len(state['current_skills'])
     nodes.append({
         "id": "current",
         "type": "default",
-        "data": {"label": f"Current State\n{len(state['current_skills'])} skills"},
-        "position": {"x": 250, "y": 50}
+        "data": {"label": f"Current State\n{skills_count} skills"},
+        "position": {"x": 250, "y": 50},
+        "style": {"background": "#e3f2fd", "border": "2px solid #2196f3"}
     })
     
     # Skill gap nodes
     if state["skill_gaps"]:
-        for i, gap in enumerate(state["skill_gaps"][:5]):
+        for i, gap in enumerate(state["skill_gaps"][:MAX_SKILL_GAPS]):
             node_id = f"skill-{i}"
+            color = "#fff3e0" if gap["priority"] == "high" else "#f3e5f5"
+            border = "#ff9800" if gap["priority"] == "high" else "#9c27b0"
             nodes.append({
                 "id": node_id,
                 "type": "default",
                 "data": {
                     "label": f"{gap['skill']}\n({gap['time_months']}mo)"
                 },
-                "position": {"x": 50 + (i * 150), "y": 200}
+                "position": {"x": 50 + (i * 150), "y": 200},
+                "style": {"background": color, "border": f"2px solid {border}"}
             })
             edges.append({
                 "id": f"e-current-{node_id}",
                 "source": "current",
                 "target": node_id,
-                "animated": True
+                "animated": True,
+                "style": {"stroke": border}
             })
     
     # Target job node
@@ -250,16 +256,18 @@ def roadmap_generator_node(state: CareerPathState) -> dict[str, Any]:
             "id": "target",
             "type": "default",
             "data": {"label": state["target_jobs"][0]},
-            "position": {"x": 250, "y": 350}
+            "position": {"x": 250, "y": 350},
+            "style": {"background": "#e8f5e9", "border": "2px solid #4caf50"}
         })
         
         # Connect skills to target
-        for i in range(min(len(state["skill_gaps"]), 5)):
+        for i in range(min(len(state["skill_gaps"]), MAX_SKILL_GAPS)):
             edges.append({
                 "id": f"e-skill-{i}-target",
                 "source": f"skill-{i}",
                 "target": "target",
-                "animated": True
+                "animated": True,
+                "style": {"stroke": "#4caf50"}
             })
     
     logger.info(f"Generated {len(nodes)} nodes and {len(edges)} edges")
