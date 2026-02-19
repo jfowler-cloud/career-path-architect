@@ -1,0 +1,39 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Check for secrets
+        run: |
+          echo "Checking for exposed secrets..."
+          if git log --all --pretty=format: -p | grep -iE "(aws_access_key_id|aws_secret_access_key|api[_-]?key)" | head -1; then
+            echo "⚠️ Potential secrets found in git history"
+            exit 1
+          fi
+          echo "✅ No secrets detected"

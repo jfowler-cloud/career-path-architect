@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Pre-commit hook to prevent committing sensitive data
+# Checks for AWS credentials, API keys, and other secrets
+
+echo "🔍 Running pre-commit security checks..."
+
+# Check for AWS credentials
+if git diff --cached | grep -iE "(aws_access_key_id|aws_secret_access_key|AWS_ACCESS_KEY|AWS_SECRET_KEY)" > /dev/null; then
+    echo "❌ ERROR: AWS credentials detected in staged files!"
+    echo "Please remove credentials before committing."
+    exit 1
+fi
+
+# Check for common secret patterns
+if git diff --cached | grep -iE "(api[_-]?key|apikey|secret[_-]?key|password|token|bearer)" | grep -v "# " | grep -v "//" > /dev/null; then
+    echo "⚠️  WARNING: Possible secrets detected in staged files!"
+    echo "Please review your changes carefully."
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+
+# Check for .env files
+if git diff --cached --name-only | grep -E "\.env$" > /dev/null; then
+    echo "❌ ERROR: .env file detected in staged files!"
+    echo "Environment files should not be committed."
+    exit 1
+fi
+
+# Check for large files (>5MB)
+for file in $(git diff --cached --name-only); do
+    if [ -f "$file" ]; then
+        size=$(wc -c < "$file")
+        if [ $size -gt 5242880 ]; then
+            echo "❌ ERROR: Large file detected: $file ($(numfmt --to=iec-i --suffix=B $size))"
+            echo "Consider using Git LFS for large files."
+            exit 1
+        fi
+    fi
+done
+
+echo "✅ Pre-commit checks passed!"
+exit 0
