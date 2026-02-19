@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+from functools import lru_cache
 from typing import Any
 
 import boto3
@@ -13,12 +14,31 @@ from ..graph.state import CareerPathState
 
 logger = logging.getLogger(__name__)
 
+# Cache bedrock client
+_bedrock_client = None
 
+
+@lru_cache(maxsize=1)
 def _get_bedrock_client():
-    """Lazy load bedrock client."""
-    return boto3.client(
-        "bedrock-runtime",
-        region_name=os.getenv("AWS_REGION", "us-east-1")
+    """Lazy load and cache bedrock client."""
+    global _bedrock_client
+    if _bedrock_client is None:
+        _bedrock_client = boto3.client(
+            "bedrock-runtime",
+            region_name=os.getenv("AWS_REGION", "us-east-1")
+        )
+    return _bedrock_client
+
+
+def _get_llm():
+    """Get configured LLM instance."""
+    return ChatBedrock(
+        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+        client=_get_bedrock_client(),
+        model_kwargs={
+            "max_tokens": 2000,
+            "temperature": 0.3,
+        }
     )
 
 
@@ -44,28 +64,19 @@ def resume_analyzer_node(state: CareerPathState) -> dict[str, Any]:
     
     logger.info("Starting resume analysis")
     
-    llm = ChatBedrock(
-        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=_get_bedrock_client(),
-    )
-    
-    prompt = f"""Analyze this resume and extract:
-1. Technical skills (programming languages, frameworks, tools, cloud services)
-2. Years of experience per skill category
-3. Key strengths and achievements
+    prompt = f"""Extract from this resume:
+1. Technical skills
+2. Years of experience per category
+3. Key strengths
 
-Resume:
+Resume (first 2000 chars):
 {state['resume_text'][:2000]}
 
-Return ONLY valid JSON in this exact format:
-{{
-  "skills": ["skill1", "skill2"],
-  "experience": {{"category": years}},
-  "strengths": ["strength1", "strength2"]
-}}"""
+Return JSON:
+{{"skills": ["..."], "experience": {{"category": years}}, "strengths": ["..."]}}"""
     
     try:
-        response = llm.invoke(prompt)
+        response = _get_llm().invoke(prompt)
         result = _extract_json(response.content)
         
         logger.info(f"Extracted {len(result.get('skills', []))} skills")
@@ -92,27 +103,17 @@ def job_parser_node(state: CareerPathState) -> dict[str, Any]:
     
     logger.info(f"Parsing {len(state['target_jobs'])} target jobs")
     
-    llm = ChatBedrock(
-        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=_get_bedrock_client(),
-    )
-    
     required_skills = {}
     nice_to_have = {}
     
     for job_title in state["target_jobs"]:
-        prompt = f"""For the role "{job_title}", list:
-1. Required technical skills
-2. Nice-to-have skills
+        prompt = f"""For "{job_title}", list required and nice-to-have technical skills.
 
-Return ONLY valid JSON:
-{{
-  "required": ["skill1", "skill2"],
-  "nice_to_have": ["skill3", "skill4"]
-}}"""
+Return JSON:
+{{"required": ["..."], "nice_to_have": ["..."]}}"""
         
         try:
-            response = llm.invoke(prompt)
+            response = _get_llm().invoke(prompt)
             result = _extract_json(response.content)
             
             required_skills[job_title] = result.get("required", [])
@@ -175,29 +176,17 @@ def learning_path_node(state: CareerPathState) -> dict[str, Any]:
             "workflow_status": "learning_path_generated"
         }
     
-    llm = ChatBedrock(
-        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        client=_get_bedrock_client(),
-    )
-    
     skills_needed = [gap["skill"] for gap in state["skill_gaps"][:5]]
     
-    prompt = f"""For these skills: {', '.join(skills_needed)}
+    prompt = f"""For skills: {', '.join(skills_needed)}
 
-Recommend:
-1. Online courses (with provider and URL)
-2. Hands-on project ideas
-3. Relevant certifications
+Recommend courses, projects, and certifications.
 
-Return ONLY valid JSON:
-{{
-  "courses": [{{"name": "...", "provider": "...", "url": "...", "duration": "..."}}],
-  "projects": [{{"name": "...", "description": "...", "skills": ["..."]}}],
-  "certifications": [{{"name": "...", "provider": "...", "url": "..."}}]
-}}"""
+Return JSON:
+{{"courses": [{{"name": "...", "provider": "...", "url": "...", "duration": "..."}}], "projects": [{{"name": "...", "description": "...", "skills": ["..."]}}], "certifications": [{{"name": "...", "provider": "...", "url": "..."}}]}}"""
     
     try:
-        response = llm.invoke(prompt)
+        response = _get_llm().invoke(prompt)
         result = _extract_json(response.content)
         
         logger.info(f"Generated {len(result.get('courses', []))} course recommendations")
