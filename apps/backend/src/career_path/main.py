@@ -50,9 +50,9 @@ app.add_middleware(
 
 
 class RoadmapRequest(BaseModel):
-    resume_text: str = Field(..., min_length=50, max_length=10000)
-    target_jobs: list[str] = Field(..., min_length=1, max_length=5)
-    user_id: str = "default"
+    resume_text: str = Field(..., min_length=50, max_length=10000, description="Resume text")
+    target_jobs: list[str] = Field(..., min_length=1, max_length=5, description="Target job titles")
+    user_id: str = Field(default="default", description="User identifier")
     
     @field_validator('target_jobs')
     @classmethod
@@ -60,16 +60,23 @@ class RoadmapRequest(BaseModel):
         if not all(len(job.strip()) > 0 for job in v):
             raise ValueError("Job titles cannot be empty")
         return [job.strip() for job in v]
+    
+    @field_validator('resume_text')
+    @classmethod
+    def validate_resume(cls, v):
+        if len(v.strip()) < 50:
+            raise ValueError("Resume must be at least 50 characters")
+        return v.strip()
 
 
 class RoadmapResponse(BaseModel):
-    nodes: list[dict]
-    edges: list[dict]
-    milestones: list[dict]
-    skill_gaps: list[dict]
-    courses: list[dict]
-    projects: list[dict]
-    certifications: list[dict]
+    nodes: list[dict] = Field(..., description="React Flow nodes")
+    edges: list[dict] = Field(..., description="React Flow edges")
+    milestones: list[dict] = Field(..., description="Career milestones")
+    skill_gaps: list[dict] = Field(..., description="Identified skill gaps")
+    courses: list[dict] = Field(..., description="Recommended courses")
+    projects: list[dict] = Field(..., description="Project ideas")
+    certifications: list[dict] = Field(..., description="Certification recommendations")
 
 
 @app.get("/health")
