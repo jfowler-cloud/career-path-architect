@@ -5,15 +5,17 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from career_path.main import app
 from career_path.progress import progress_tracker
+from career_path.cache import response_cache
 
 
 client = TestClient(app)
 
 
 @pytest.fixture(autouse=True)
-def reset_progress_tracker():
-    """Reset progress tracker before each test."""
+def reset_state():
+    """Reset state before each test."""
     progress_tracker._progress.clear()
+    response_cache.clear()
     yield
 
 
@@ -355,3 +357,38 @@ def test_compare_paths_validation_error():
         "path2_skills": ["Java"]
     })
     assert response.status_code == 422
+
+
+def test_health_includes_cache_stats():
+    """Test health endpoint includes cache stats."""
+    with patch('career_path.main.check_aws_credentials') as mock_aws, \
+         patch('career_path.main.check_bedrock_access') as mock_bedrock:
+        mock_aws.return_value = (True, "OK")
+        mock_bedrock.return_value = (True, "OK")
+        
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert "cache_stats" in data
+        assert "total_entries" in data["cache_stats"]
+
+
+def test_clear_cache_endpoint():
+    """Test clearing cache."""
+    # Add something to cache first
+    response_cache.set("test", "value")
+    
+    response = client.post("/api/cache/clear")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["message"] == "Cache cleared"
+    assert data["stats"]["total_entries"] == 0
+
+
+def test_cleanup_cache_endpoint():
+    """Test cleanup expired cache entries."""
+    response = client.post("/api/cache/cleanup")
+    assert response.status_code == 200
+    data = response.json()
+    assert "removed" in data
+    assert "stats" in data

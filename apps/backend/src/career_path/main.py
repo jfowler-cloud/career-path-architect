@@ -12,6 +12,7 @@ from .graph.workflow import create_workflow
 from .health import check_aws_credentials, check_bedrock_access
 from .progress import progress_tracker, SkillProgress
 from .comparison import compare_career_paths, calculate_learning_effort
+from .cache import response_cache
 
 # Configure logging
 logging.basicConfig(
@@ -92,7 +93,26 @@ async def health():
         "status": "healthy" if (aws_ok and bedrock_ok) else "degraded",
         "workflow_initialized": workflow is not None,
         "aws_credentials": {"ok": aws_ok, "message": aws_msg},
-        "bedrock_access": {"ok": bedrock_ok, "message": bedrock_msg}
+        "bedrock_access": {"ok": bedrock_ok, "message": bedrock_msg},
+        "cache_stats": response_cache.get_stats()
+    }
+
+
+@app.post("/api/cache/clear")
+async def clear_cache():
+    """Clear response cache."""
+    response_cache.clear()
+    return {"message": "Cache cleared", "stats": response_cache.get_stats()}
+
+
+@app.post("/api/cache/cleanup")
+async def cleanup_cache():
+    """Remove expired cache entries."""
+    removed = response_cache.cleanup_expired()
+    return {
+        "message": f"Removed {removed} expired entries",
+        "removed": removed,
+        "stats": response_cache.get_stats()
     }
 
 
