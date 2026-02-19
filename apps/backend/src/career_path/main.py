@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
 from .graph.workflow import create_workflow
+from .health import check_aws_credentials, check_bedrock_access
 
 # Configure logging
 logging.basicConfig(
@@ -81,10 +82,15 @@ class RoadmapResponse(BaseModel):
 
 @app.get("/health")
 async def health():
-    """Health check endpoint."""
+    """Health check endpoint with AWS connectivity tests."""
+    aws_ok, aws_msg = check_aws_credentials()
+    bedrock_ok, bedrock_msg = check_bedrock_access()
+    
     return {
-        "status": "healthy",
-        "workflow_initialized": workflow is not None
+        "status": "healthy" if (aws_ok and bedrock_ok) else "degraded",
+        "workflow_initialized": workflow is not None,
+        "aws_credentials": {"ok": aws_ok, "message": aws_msg},
+        "bedrock_access": {"ok": bedrock_ok, "message": bedrock_msg}
     }
 
 
