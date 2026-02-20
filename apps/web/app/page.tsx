@@ -237,8 +237,9 @@ export default function Home() {
             </Container>
 
             {roadmapData && (
-              <>
+              <React.Fragment key="roadmap-results">
                 <Container
+                  key="critical-review-container"
                   header={
                     <Header 
                       variant="h2"
@@ -304,6 +305,7 @@ export default function Home() {
                 </Container>
 
                 <Container
+                  key="visual-roadmap-container"
                   header={<Header variant="h2">Visual Roadmap</Header>}
                 >
                   <RoadmapCanvas
@@ -314,6 +316,7 @@ export default function Home() {
 
                 {roadmapData.skill_gaps.length > 0 && (
                   <Container
+                    key="skill-gaps-container"
                     header={
                       <Header 
                         variant="h2"
@@ -339,6 +342,7 @@ export default function Home() {
 
                 {roadmapData.courses.length > 0 && (
                   <Container
+                    key="courses-container"
                     header={
                       <Header 
                         variant="h2"
@@ -368,6 +372,7 @@ export default function Home() {
 
                 {roadmapData.projects.length > 0 && (
                   <Container
+                    key="projects-container"
                     header={
                       <Header 
                         variant="h2"
@@ -392,7 +397,7 @@ export default function Home() {
                     </SpaceBetween>
                   </Container>
                 )}
-              </>
+              </React.Fragment>
             )}
           </SpaceBetween>
         }
