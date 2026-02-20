@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppLayout from "@cloudscape-design/components/app-layout";
 import TopNavigation from "@cloudscape-design/components/top-navigation";
 import Container from "@cloudscape-design/components/container";
@@ -10,6 +10,7 @@ import Button from "@cloudscape-design/components/button";
 import Textarea from "@cloudscape-design/components/textarea";
 import Input from "@cloudscape-design/components/input";
 import Alert from "@cloudscape-design/components/alert";
+import { applyMode, Mode } from "@cloudscape-design/global-styles";
 
 import RoadmapCanvas from "@/components/RoadmapCanvas";
 
@@ -42,6 +43,30 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [roadmapData, setRoadmapData] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      applyMode(Mode.Dark);
+    } else {
+      applyMode(Mode.Light);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    applyMode(newMode ? Mode.Dark : Mode.Light);
+    localStorage.setItem("theme", newMode ? "dark" : "light");
+  };
+
+  if (!mounted) {
+    return null;
+  }
 
   const loadExample = () => {
     setResumeText(EXAMPLE_RESUME);
@@ -111,6 +136,13 @@ export default function Home() {
           title: "Career Path Architect",
         }}
         utilities={[
+          {
+            type: "button",
+            iconName: darkMode ? "view-full" : "view-vertical",
+            title: darkMode ? "Light mode" : "Dark mode",
+            ariaLabel: darkMode ? "Switch to light mode" : "Switch to dark mode",
+            onClick: toggleTheme,
+          },
           {
             type: "button",
             text: "GitHub",
