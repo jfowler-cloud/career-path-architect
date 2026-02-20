@@ -162,6 +162,7 @@ export default function Home() {
         content={
           <SpaceBetween size="l">
             <Container
+              key="input-form-container"
               header={
                 <Header variant="h2" description="Generate your personalized career roadmap">
                   Create Career Roadmap
