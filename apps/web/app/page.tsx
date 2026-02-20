@@ -132,9 +132,9 @@ export default function Home() {
               }
             >
               <SpaceBetween size="m">
-                {error && <Alert type="error">{error}</Alert>}
+                {error && <Alert type="error" key="error-alert">{error}</Alert>}
                 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div key="example-button" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
                     <strong>Try it out:</strong>
                   </div>
@@ -144,6 +144,7 @@ export default function Home() {
                 </div>
 
                 <Textarea
+                  key="resume-input"
                   label="Resume"
                   placeholder="Paste your resume here..."
                   value={resumeText}
@@ -152,6 +153,7 @@ export default function Home() {
                 />
 
                 <Input
+                  key="job-title-input"
                   label="Target Job Title"
                   placeholder="e.g., Senior Cloud Architect"
                   value={targetJob}
@@ -159,6 +161,7 @@ export default function Home() {
                 />
 
                 <Textarea
+                  key="job-desc-input"
                   label="Job Description (Optional)"
                   description="Paste the full job posting for more accurate gap analysis"
                   placeholder="Paste job description here for detailed requirements analysis..."
@@ -168,6 +171,7 @@ export default function Home() {
                 />
 
                 <Textarea
+                  key="specialty-input"
                   label="Additional Context (Optional)"
                   description="Any specific areas of focus, career goals, or constraints"
                   placeholder="e.g., Focus on cloud-native technologies, interested in leadership track, prefer remote-friendly skills..."
@@ -177,6 +181,7 @@ export default function Home() {
                 />
 
                 <Button
+                  key="generate-button"
                   variant="primary"
                   onClick={handleGenerate}
                   loading={loading}
@@ -187,7 +192,7 @@ export default function Home() {
                 </Button>
                 
                 {loading && (
-                  <Alert type="info">
+                  <Alert type="info" key="loading-alert">
                     This may take 30-60 seconds. AI is analyzing your resume and generating recommendations...
                   </Alert>
                 )}
