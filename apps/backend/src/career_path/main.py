@@ -58,6 +58,8 @@ app.add_middleware(
 class RoadmapRequest(BaseModel):
     resume_text: str = Field(..., min_length=50, max_length=10000, description="Resume text")
     target_jobs: list[str] = Field(..., min_length=1, max_length=5, description="Target job titles")
+    job_description: str | None = Field(None, max_length=5000, description="Optional job posting text")
+    specialty_info: str | None = Field(None, max_length=1000, description="Optional career focus/constraints")
     user_id: str = Field(default="default", description="User identifier")
     
     @field_validator('target_jobs')
@@ -140,6 +142,8 @@ async def generate_roadmap(request: RoadmapRequest, req: Request):
             "messages": [],
             "resume_text": request.resume_text,
             "target_jobs": request.target_jobs,
+            "job_description": request.job_description,
+            "specialty_info": request.specialty_info,
             "user_id": request.user_id,
             "current_skills": [],
             "experience_years": {},

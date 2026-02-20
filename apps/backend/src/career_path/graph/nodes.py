@@ -111,7 +111,20 @@ def job_parser_node(state: CareerPathState) -> dict[str, Any]:
     nice_to_have = {}
     
     for job_title in state["target_jobs"]:
-        prompt = f"""For "{job_title}", list required and nice-to-have technical skills.
+        # Use job description if provided, otherwise infer from title
+        if state.get("job_description"):
+            prompt = f"""Analyze this job posting for "{job_title}":
+
+{state['job_description'][:2000]}
+
+Extract required and nice-to-have technical skills.
+{f"Focus on: {state['specialty_info']}" if state.get('specialty_info') else ""}
+
+Return JSON:
+{{"required": ["..."], "nice_to_have": ["..."]}}"""
+        else:
+            prompt = f"""For "{job_title}", list required and nice-to-have technical skills.
+{f"Focus on: {state['specialty_info']}" if state.get('specialty_info') else ""}
 
 Return JSON:
 {{"required": ["..."], "nice_to_have": ["..."]}}"""

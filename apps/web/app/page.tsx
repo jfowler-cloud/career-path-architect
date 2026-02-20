@@ -37,6 +37,8 @@ Education:
 export default function Home() {
   const [resumeText, setResumeText] = useState("");
   const [targetJob, setTargetJob] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [specialtyInfo, setSpecialtyInfo] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [roadmapData, setRoadmapData] = useState<any>(null);
@@ -44,6 +46,8 @@ export default function Home() {
   const loadExample = () => {
     setResumeText(EXAMPLE_RESUME);
     setTargetJob("Senior Cloud Architect");
+    setJobDescription("");
+    setSpecialtyInfo("");
     setError("");
   };
 
@@ -72,6 +76,8 @@ export default function Home() {
         body: JSON.stringify({
           resume_text: resumeText,
           target_jobs: [targetJob],
+          job_description: jobDescription || undefined,
+          specialty_info: specialtyInfo || undefined,
           user_id: "demo"
         }),
         signal: controller.signal
@@ -150,6 +156,24 @@ export default function Home() {
                   placeholder="e.g., Senior Cloud Architect"
                   value={targetJob}
                   onChange={({ detail }) => setTargetJob(detail.value)}
+                />
+
+                <Textarea
+                  label="Job Description (Optional)"
+                  description="Paste the full job posting for more accurate gap analysis"
+                  placeholder="Paste job description here for detailed requirements analysis..."
+                  value={jobDescription}
+                  onChange={({ detail }) => setJobDescription(detail.value)}
+                  rows={6}
+                />
+
+                <Textarea
+                  label="Additional Context (Optional)"
+                  description="Any specific areas of focus, career goals, or constraints"
+                  placeholder="e.g., Focus on cloud-native technologies, interested in leadership track, prefer remote-friendly skills..."
+                  value={specialtyInfo}
+                  onChange={({ detail }) => setSpecialtyInfo(detail.value)}
+                  rows={3}
                 />
 
                 <Button

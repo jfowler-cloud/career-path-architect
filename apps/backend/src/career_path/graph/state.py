@@ -10,6 +10,8 @@ class CareerPathState(TypedDict):
     messages: Annotated[list, add_messages]
     resume_text: str
     target_jobs: list[str]
+    job_description: str | None
+    specialty_info: str | None
     user_id: str
     
     # Resume Analysis
