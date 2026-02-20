@@ -1,0 +1,49 @@
+SARAH CHEN
+Senior Software Engineer
+Email: sarah.chen@email.com | Phone: (555) 123-4567
+LinkedIn: linkedin.com/in/sarahchen | GitHub: github.com/sarahchen
+
+PROFESSIONAL SUMMARY
+Results-driven Senior Software Engineer with 6 years of experience building scalable web applications. Strong background in React, Node.js, and PostgreSQL. Proven track record of delivering high-quality features and mentoring junior developers.
+
+TECHNICAL SKILLS
+• Languages: JavaScript, TypeScript, Python, SQL
+• Frontend: React, Next.js, HTML/CSS, Tailwind CSS
+• Backend: Node.js, Express, REST APIs
+• Databases: PostgreSQL, MongoDB, Redis
+• Tools: Git, Docker, Jest, GitHub Actions
+• Cloud: AWS (EC2, S3, RDS - basic usage)
+
+PROFESSIONAL EXPERIENCE
+
+Senior Software Engineer | TechCorp Inc. | Jan 2022 - Present
+• Led development of customer dashboard using React and Node.js, serving 50K+ users
+• Implemented RESTful APIs with Express.js and PostgreSQL
+• Reduced page load time by 40% through code splitting and lazy loading
+• Mentored 3 junior developers on React best practices and code reviews
+• Collaborated with product team to define technical requirements
+
+Software Engineer | StartupXYZ | Jun 2019 - Dec 2021
+• Built e-commerce platform features using React, Redux, and Node.js
+• Designed and implemented PostgreSQL database schema for order management
+• Integrated Stripe payment processing and handled webhook events
+• Wrote unit tests with Jest achieving 85% code coverage
+• Participated in agile sprints and daily standups
+
+Junior Software Engineer | WebDev Solutions | Jan 2018 - May 2019
+• Developed responsive web pages using HTML, CSS, and JavaScript
+• Fixed bugs and added features to existing React applications
+• Worked with senior engineers to learn best practices
+• Participated in code reviews and team meetings
+
+EDUCATION
+Bachelor of Science in Computer Science
+State University | Graduated 2017
+
+PROJECTS
+• Personal Blog Platform - Built with Next.js, TypeScript, and MongoDB
+• Task Management App - React frontend with Node.js/Express backend
+• Weather Dashboard - Integrated third-party APIs with React
+
+CERTIFICATIONS
+• AWS Certified Cloud Practitioner (2023)
