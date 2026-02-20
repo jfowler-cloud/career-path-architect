@@ -28,9 +28,10 @@ The goal was to demonstrate:
 | | Resume Tailor AI | Scaffold AI | Career Path Architect |
 |---|---|---|---|
 | **Purpose** | Resume optimization | AWS architecture design | Career planning |
+| **Orchestration** | AWS Step Functions | LangGraph | LangGraph |
 | **Agents** | Step Functions workflow | 4 LangGraph agents | 6 LangGraph agents |
 | **Development** | 3 days | 1 day | 2 hours |
-| **Tests** | 212 tests, 98% | 150+ tests | 142 tests, 99% |
+| **Tests** | 212 tests, 98% | 116 tests | 142 tests, 99% |
 | **Features** | Resume tailoring | Architecture generation | Roadmap + Critical Review |
 
 All three projects share production patterns (validation, error handling, rate limiting, testing) -- demonstrating consistent engineering practices across different problem domains.
