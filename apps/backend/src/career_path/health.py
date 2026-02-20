@@ -7,7 +7,7 @@ from botocore.exceptions import ClientError
 def check_bedrock_access() -> tuple[bool, str]:
     """Check if Bedrock is accessible."""
     try:
-        client = boto3.client("bedrock-runtime")
+        client = boto3.client("bedrock")
         # Try to list foundation models as a connectivity test
         client.list_foundation_models()
         return True, "Bedrock accessible"
