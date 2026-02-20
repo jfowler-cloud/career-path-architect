@@ -161,6 +161,7 @@ def gap_analysis_node(state: CareerPathState) -> dict[str, Any]:
     current = set(s.lower() for s in state["current_skills"])
     gaps = []
     matched = []
+    seen_skills = set()  # Track skills we've already added
     
     # Calculate matched and missing skills
     all_required = []
@@ -169,19 +170,17 @@ def gap_analysis_node(state: CareerPathState) -> dict[str, Any]:
         for skill in required:
             if skill.lower() in current:
                 matched.append(skill)
-            else:
-                missing = True
-                for idx, s in enumerate(required):
-                    if s.lower() not in current:
-                        priority = calculate_priority(idx + 1, len(required))
-                        time_months = estimate_learning_time(s)
-                        gaps.append({
-                            "skill": s,
-                            "for_job": job_title,
-                            "priority": priority,
-                            "difficulty": "medium",
-                            "time_months": time_months
-                        })
+            elif skill.lower() not in seen_skills:  # Only add if not seen
+                seen_skills.add(skill.lower())
+                priority = calculate_priority(len(gaps) + 1, len(required))
+                time_months = estimate_learning_time(skill)
+                gaps.append({
+                    "skill": skill,
+                    "for_job": job_title,
+                    "priority": priority,
+                    "difficulty": "medium",
+                    "time_months": time_months
+                })
     
     # Calculate fit score
     total_skills = len(set(s.lower() for s in all_required))

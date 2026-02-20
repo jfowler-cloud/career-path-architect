@@ -208,7 +208,7 @@ export default function Home() {
                 >
                   <SpaceBetween size="m">
                     {roadmapData.critical_review && (
-                      <>
+                      <div>
                         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                           <div>
                             <strong>Overall Rating:</strong> {roadmapData.critical_review.overallRating}/10
@@ -219,13 +219,13 @@ export default function Home() {
                         </div>
                         
                         {roadmapData.critical_review.summary && (
-                          <Alert type="info">
+                          <Alert type="info" style={{marginTop: "16px"}}>
                             {roadmapData.critical_review.summary}
                           </Alert>
                         )}
 
                         {roadmapData.critical_review.strengths?.length > 0 && (
-                          <div>
+                          <div style={{marginTop: "16px"}}>
                             <strong>✅ Strengths:</strong>
                             <ul style={{marginTop: "8px"}}>
                               {roadmapData.critical_review.strengths.map((s: string, i: number) => (
@@ -236,7 +236,7 @@ export default function Home() {
                         )}
 
                         {roadmapData.critical_review.weaknesses?.length > 0 && (
-                          <div>
+                          <div style={{marginTop: "16px"}}>
                             <strong>⚠️ Areas for Improvement:</strong>
                             <ul style={{marginTop: "8px"}}>
                               {roadmapData.critical_review.weaknesses.map((w: string, i: number) => (
@@ -247,7 +247,7 @@ export default function Home() {
                         )}
 
                         {roadmapData.critical_review.actionableSteps?.length > 0 && (
-                          <div>
+                          <div style={{marginTop: "16px"}}>
                             <strong>🎯 Action Steps:</strong>
                             <ol style={{marginTop: "8px"}}>
                               {roadmapData.critical_review.actionableSteps.map((step: string, i: number) => (
@@ -256,7 +256,7 @@ export default function Home() {
                             </ol>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
                   </SpaceBetween>
                 </Container>
