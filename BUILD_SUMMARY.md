@@ -291,23 +291,33 @@ Output (Visual Roadmap + Recommendations)
 
 ## Development Time
 
-- **Planning**: 30 minutes (technical spec review)
-- **Backend Setup**: 45 minutes (FastAPI + LangGraph)
-- **Agent Implementation**: 60 minutes (5 agents)
-- **Frontend Setup**: 30 minutes (Next.js + Cloudscape)
-- **React Flow Canvas**: 20 minutes
-- **Testing & Fixes**: 15 minutes
-- **Documentation**: 20 minutes
+### Session 1: MVP (1 hour)
+- **Backend Setup**: 15 minutes (FastAPI + LangGraph)
+- **Agent Implementation**: 30 minutes (5 agents)
+- **Frontend Setup**: 10 minutes (Next.js + Cloudscape)
+- **React Flow Canvas**: 5 minutes
 
-**Total**: ~3.5 hours for functional MVP
+**Session 1 Total**: ~1 hour for functional MVP
+
+### Session 2: Production Polish (1 hour)
+- **Critical Review Agent**: 15 minutes
+- **Fit Score & Matched Skills**: 10 minutes
+- **Job Description Parsing**: 10 minutes
+- **Deployment Modes (TESTING/OPTIMIZED/PREMIUM)**: 10 minutes
+- **Dark Mode**: 5 minutes
+- **Bug Fixes & Polish**: 10 minutes
+
+**Session 2 Total**: ~1 hour for production features
+
+**Grand Total**: ~2 hours for production-ready application
 
 ---
 
 ## Git Commits
 
 ```
-8a59463 fix: Lazy load bedrock client to avoid initialization errors
-bf280db feat: Initial implementation with LangGraph multi-agent workflow
+61ce290 docs: Update README and add pre-release checklist
+e765e12 design: Change logo to map pin/destination marker
 d2b79d5 docs: Add comprehensive technical specification with LangGraph workflow design
 ce36b5f Initial commit: Project setup with README, git hooks, and best practices
 ```

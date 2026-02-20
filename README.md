@@ -6,7 +6,7 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-![Built in 1 Hour](https://img.shields.io/badge/Built%20in-1%20Hour-brightgreen?style=flat-square)
+![Built in 2 Hours](https://img.shields.io/badge/Built%20in-2%20Hours-brightgreen?style=flat-square)
 ![Tests: 142](https://img.shields.io/badge/Tests-142%20passing-brightgreen?style=flat-square)
 ![Coverage: 99%](https://img.shields.io/badge/Coverage-99%25-brightgreen?style=flat-square)
 ![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-purple?style=flat-square)
@@ -20,8 +20,8 @@ After building [Resume Tailor AI](https://github.com/jfowler-cloud/resume-tailor
 
 The goal was to demonstrate:
 
-- **Extreme rapid development** -- Production-quality multi-agent system in 1 hour
-- **LangGraph expertise** -- 5 specialized agents working together
+- **Extreme rapid development** -- Production-quality multi-agent system in 2 hours
+- **LangGraph expertise** -- 6 specialized agents working together
 - **Test-driven approach** -- 99% coverage with 142 tests from the start
 - **Production mindset** -- Rate limiting, caching, validation, and security built-in
 
@@ -29,7 +29,7 @@ The goal was to demonstrate:
 |---|---|---|---|
 | **Purpose** | Resume optimization | AWS architecture design | Career planning |
 | **Agents** | Step Functions workflow | 4 LangGraph agents | 6 LangGraph agents |
-| **Development** | 3 days | 1 day | 1 hour |
+| **Development** | 3 days | 1 day | 2 hours |
 | **Tests** | 212 tests, 98% | 150+ tests | 142 tests, 99% |
 | **Features** | Resume tailoring | Architecture generation | Roadmap + Critical Review |
 
@@ -41,19 +41,19 @@ All three projects share production patterns (validation, error handling, rate l
 
 | Milestone | Timeline | Highlights |
 |-----------|----------|------------|
-| **Full Project** | **1 Hour** | Complete full-stack LangGraph multi-agent system with 142 tests and 99% coverage |
+| **MVP (Session 1)** | **1 Hour** | Core 5-agent system with visual roadmap generation |
+| **Production Polish (Session 2)** | **1 Hour** | Critical review, fit score, dark mode, deployment modes |
+| **Total** | **2 Hours** | Complete full-stack LangGraph multi-agent system with 142 tests and 99% coverage |
 
-> This project demonstrates **extreme rapid development** using AI-assisted workflows, achieving a production-quality multi-agent system with comprehensive testing in just 1 hour.
-
-> This project demonstrates **rapid AI agent development** using LangGraph and modern tooling (FastAPI + React + uv), achieving a production-quality multi-agent system in days instead of weeks.
+> This project demonstrates **extreme rapid development** using AI-assisted workflows, achieving a production-quality multi-agent system with comprehensive testing in just 2 hours (1 hour MVP + 1 hour polish).
 
 ---
 
 ## 📋 Overview
 
-An intelligent career planning platform that analyzes your resume, compares it against target job descriptions, identifies skill gaps, and generates interactive visual learning roadmaps with courses, projects, and timelines. Built with LangGraph multi-agent orchestration and AWS Bedrock Claude Opus 4.5.
+An intelligent career planning platform that analyzes your resume, compares it against target job descriptions, identifies skill gaps, and generates interactive visual learning roadmaps with courses, projects, and timelines. Built with LangGraph multi-agent orchestration and AWS Bedrock Claude models.
 
-**Built for rapid iteration** - leveraging LangGraph's agent framework and modern Python tooling, this project went from concept to working MVP with visual roadmap generation in 2 days, then to production-ready with 97% test coverage within a week.
+**Built for extreme rapid iteration** - leveraging LangGraph's agent framework, modern Python tooling (uv, FastAPI), and AI-assisted development, this project went from concept to production-ready MVP in just 2 hours with 99% test coverage.
 
 ### My Philosophy: Honest Career Growth Through Actionable Insights
 
