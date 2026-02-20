@@ -85,6 +85,9 @@ class RoadmapResponse(BaseModel):
     courses: list[dict] = Field(..., description="Recommended courses")
     projects: list[dict] = Field(..., description="Project ideas")
     certifications: list[dict] = Field(..., description="Certification recommendations")
+    fit_score: int = Field(..., description="Overall fit percentage (0-100)")
+    matched_skills: list[str] = Field(..., description="Skills that match target role")
+    critical_review: dict = Field(..., description="Honest assessment with strengths/weaknesses")
 
 
 @app.get("/health")
@@ -152,9 +155,12 @@ async def generate_roadmap(request: RoadmapRequest, req: Request):
             "nice_to_have_skills": {},
             "skill_gaps": [],
             "estimated_time": {},
+            "fit_score": 0,
+            "matched_skills": [],
             "courses": [],
             "projects": [],
             "certifications": [],
+            "critical_review": {},
             "nodes": [],
             "edges": [],
             "milestones": [],
@@ -173,7 +179,10 @@ async def generate_roadmap(request: RoadmapRequest, req: Request):
             skill_gaps=result["skill_gaps"],
             courses=result["courses"],
             projects=result["projects"],
-            certifications=result["certifications"]
+            certifications=result["certifications"],
+            fit_score=result.get("fit_score", 0),
+            matched_skills=result.get("matched_skills", []),
+            critical_review=result.get("critical_review", {})
         )
         
     except Exception as e:

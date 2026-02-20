@@ -148,33 +148,49 @@ Return JSON:
 
 
 def gap_analysis_node(state: CareerPathState) -> dict[str, Any]:
-    """Identify and prioritize skill gaps."""
+    """Identify and prioritize skill gaps with fit score."""
     
     logger.info("Analyzing skill gaps")
     
     current = set(s.lower() for s in state["current_skills"])
     gaps = []
+    matched = []
     
+    # Calculate matched and missing skills
+    all_required = []
     for job_title, required in state["required_skills"].items():
-        missing = [s for s in required if s.lower() not in current]
-        for idx, skill in enumerate(missing):
-            priority = calculate_priority(idx + 1, len(missing))
-            time_months = estimate_learning_time(skill)
-            gaps.append({
-                "skill": skill,
-                "for_job": job_title,
-                "priority": priority,
-                "difficulty": "medium",
-                "time_months": time_months
-            })
+        all_required.extend(required)
+        for skill in required:
+            if skill.lower() in current:
+                matched.append(skill)
+            else:
+                missing = True
+                for idx, s in enumerate(required):
+                    if s.lower() not in current:
+                        priority = calculate_priority(idx + 1, len(required))
+                        time_months = estimate_learning_time(s)
+                        gaps.append({
+                            "skill": s,
+                            "for_job": job_title,
+                            "priority": priority,
+                            "difficulty": "medium",
+                            "time_months": time_months
+                        })
+    
+    # Calculate fit score
+    total_skills = len(set(s.lower() for s in all_required))
+    matched_count = len(set(s.lower() for s in matched))
+    fit_score = int((matched_count / total_skills * 100)) if total_skills > 0 else 0
     
     # Sort by priority then skill name
     gaps.sort(key=lambda x: (x["priority"] != "high", x["skill"]))
     
-    logger.info(f"Found {len(gaps)} skill gaps")
+    logger.info(f"Found {len(gaps)} skill gaps, fit score: {fit_score}%")
     
     return {
         "skill_gaps": gaps,
+        "fit_score": fit_score,
+        "matched_skills": list(set(matched)),
         "workflow_status": "gaps_analyzed"
     }
 
@@ -221,6 +237,63 @@ Return JSON:
             "projects": [],
             "certifications": [],
             "workflow_status": "learning_path_generated",
+            "error": str(e)
+        }
+
+
+def critical_review_node(state: CareerPathState) -> dict[str, Any]:
+    """Provide honest assessment of career readiness."""
+    
+    logger.info("Performing critical review")
+    
+    prompt = f"""Provide brutally honest feedback on this career transition readiness.
+
+CURRENT PROFILE:
+- Skills: {', '.join(state['current_skills'][:20])}
+- Experience: {state.get('experience_years', {})}
+- Strengths: {', '.join(state.get('strengths', [])[:5])}
+
+TARGET ROLE: {', '.join(state['target_jobs'])}
+
+FIT SCORE: {state.get('fit_score', 0)}%
+SKILL GAPS: {len(state.get('skill_gaps', []))} missing skills
+
+Provide critical analysis in JSON:
+{{
+  "overallRating": <1-10 score>,
+  "readinessLevel": "<not ready|somewhat ready|ready|highly ready>",
+  "strengths": [<what works well>],
+  "weaknesses": [<what needs improvement>],
+  "redFlags": [<potential concerns>],
+  "competitivePosition": "<how you compare to typical candidates>",
+  "actionableSteps": [<specific improvements>],
+  "timelineRealism": "<honest assessment of timeline>",
+  "summary": "<2-3 sentence honest assessment>"
+}}
+
+Be direct and constructive. Return ONLY valid JSON."""
+    
+    try:
+        response = _get_llm().invoke(prompt)
+        result = _extract_json(response.content)
+        
+        logger.info(f"Critical review complete: {result.get('overallRating', 0)}/10")
+        
+        return {
+            "critical_review": result,
+            "workflow_status": "review_complete"
+        }
+    except Exception as e:
+        logger.error(f"Critical review failed: {e}")
+        return {
+            "critical_review": {
+                "overallRating": 0,
+                "summary": "Review unavailable",
+                "strengths": [],
+                "weaknesses": [],
+                "actionableSteps": []
+            },
+            "workflow_status": "review_complete",
             "error": str(e)
         }
 

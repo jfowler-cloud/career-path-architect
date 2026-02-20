@@ -26,11 +26,16 @@ class CareerPathState(TypedDict):
     # Gap Analysis
     skill_gaps: list[dict]
     estimated_time: dict[str, int]
+    fit_score: int
+    matched_skills: list[str]
     
     # Learning Path
     courses: list[dict]
     projects: list[dict]
     certifications: list[dict]
+    
+    # Critical Review
+    critical_review: dict
     
     # Roadmap
     nodes: list[dict]

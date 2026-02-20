@@ -197,6 +197,71 @@ export default function Home() {
             {roadmapData && (
               <>
                 <Container
+                  header={
+                    <Header 
+                      variant="h2"
+                      description={`${roadmapData.fit_score}% match • ${roadmapData.matched_skills?.length || 0} skills matched • ${roadmapData.skill_gaps?.length || 0} gaps identified`}
+                    >
+                      Career Readiness Assessment
+                    </Header>
+                  }
+                >
+                  <SpaceBetween size="m">
+                    {roadmapData.critical_review && (
+                      <>
+                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                          <div>
+                            <strong>Overall Rating:</strong> {roadmapData.critical_review.overallRating}/10
+                          </div>
+                          <div>
+                            <strong>Readiness:</strong> {roadmapData.critical_review.readinessLevel}
+                          </div>
+                        </div>
+                        
+                        {roadmapData.critical_review.summary && (
+                          <Alert type="info">
+                            {roadmapData.critical_review.summary}
+                          </Alert>
+                        )}
+
+                        {roadmapData.critical_review.strengths?.length > 0 && (
+                          <div>
+                            <strong>✅ Strengths:</strong>
+                            <ul style={{marginTop: "8px"}}>
+                              {roadmapData.critical_review.strengths.map((s: string, i: number) => (
+                                <li key={`strength-${i}`}>{s}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {roadmapData.critical_review.weaknesses?.length > 0 && (
+                          <div>
+                            <strong>⚠️ Areas for Improvement:</strong>
+                            <ul style={{marginTop: "8px"}}>
+                              {roadmapData.critical_review.weaknesses.map((w: string, i: number) => (
+                                <li key={`weakness-${i}`}>{w}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {roadmapData.critical_review.actionableSteps?.length > 0 && (
+                          <div>
+                            <strong>🎯 Action Steps:</strong>
+                            <ol style={{marginTop: "8px"}}>
+                              {roadmapData.critical_review.actionableSteps.map((step: string, i: number) => (
+                                <li key={`action-${i}`}>{step}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </SpaceBetween>
+                </Container>
+
+                <Container
                   header={<Header variant="h2">Visual Roadmap</Header>}
                 >
                   <RoadmapCanvas
