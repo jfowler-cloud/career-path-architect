@@ -34,7 +34,7 @@ The goal was to demonstrate:
 | **Tests** | 212 tests, 98% | 116 tests, 67%* | 142 tests, 99% |
 | **Features** | Resume tailoring | Architecture generation | Roadmap + Critical Review |
 
-*Scaffold AI's 67% coverage focuses on core business logic (LangGraph workflow, security review, IaC generation). Missing coverage is in deployment infrastructure (CDK synthesis, AWS deployment) requiring extensive mocking.
+*Scaffold AI's 67% coverage focuses on core business logic (LangGraph workflow, security review, IaC generation). Missing coverage is in deployment infrastructure (CDK synthesis, AWS deployment) which was out of scope for the 1-day build.
 
 All three projects share production patterns (validation, error handling, rate limiting, testing) -- demonstrating consistent engineering practices across different problem domains.
 
