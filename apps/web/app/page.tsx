@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AppLayout from "@cloudscape-design/components/app-layout";
 import TopNavigation from "@cloudscape-design/components/top-navigation";
 import Container from "@cloudscape-design/components/container";
@@ -251,7 +251,7 @@ export default function Home() {
                   }
                 >
                   <SpaceBetween size="m">
-                    {roadmapData.critical_review && (
+                    {roadmapData.critical_review && roadmapData.critical_review.overallRating > 0 && (
                       <div>
                         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                           <div>
@@ -301,6 +301,12 @@ export default function Home() {
                           </div>
                         )}
                       </div>
+                    )}
+                    
+                    {(!roadmapData.critical_review || roadmapData.critical_review.overallRating === 0) && (
+                      <Alert type="warning">
+                        Career readiness assessment is currently unavailable. Please check your skill gaps and recommendations below.
+                      </Alert>
                     )}
                   </SpaceBetween>
                 </Container>

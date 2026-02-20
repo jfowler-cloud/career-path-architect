@@ -107,47 +107,13 @@ An intelligent career planning platform that analyzes your resume, compares it a
 
 - AWS Account with credentials configured (`aws configure`)
 - Python 3.12+ with [uv](https://docs.astral.sh/uv/) installed
-- Node.js 20+ and npm
-- AWS Bedrock access to Claude Opus 4.5
+- Node.js 22+ and pnpm 10+
+- AWS Bedrock access to Claude models
 
-### Run Backend (2 minutes)
+### One-Command Setup
 
 ```bash
-# Clone repository
 git clone https://github.com/jfowler-cloud/career-path-architect.git
-cd career-path-architect/apps/backend
-
-# Install dependencies with uv
-uv sync
-
-# Set AWS region and deployment mode
-export AWS_REGION=us-east-1
-export DEPLOYMENT_MODE=TESTING  # or OPTIMIZED or PREMIUM
-
-# Run FastAPI server (port 8000)
-uv run uvicorn career_path.main:app --reload
-```
-
-### Run Frontend (1 minute)
-
-```bash
-# In a new terminal
-cd career-path-architect/apps/web
-
-# Install dependencies
-pnpm install
-
-# Create environment file
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
-
-# Start Next.js dev server (port 3000)
-pnpm run dev
-```
-
-### Quick Start with dev.sh (Recommended)
-
-```bash
-# One command to start everything
 cd career-path-architect
 ./dev.sh
 ```
@@ -156,13 +122,13 @@ The `dev.sh` script will:
 - Check for required tools (uv, pnpm)
 - Install all dependencies
 - Set up environment files
-- Start both backend and frontend in parallel
+- Start both backend (port 8000) and frontend (port 3000)
 
-**Important:** Request access to Claude models in [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model access before first use.
+**Important**: Request access to Claude models in [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model access before first use.
 
 Open http://localhost:3000 and start building your career roadmap!
 
-**Detailed guides:** [QUICKSTART.md](QUICKSTART.md) | [DEVELOPMENT.md](DEVELOPMENT.md)
+**Detailed guides**: [QUICKSTART.md](QUICKSTART.md) | [DEVELOPMENT.md](DEVELOPMENT.md)
 
 ---
 
@@ -240,21 +206,29 @@ FastAPI Backend
 
 ## 📸 Screenshots
 
-### Upload Resume & Target Roles
-![Upload Interface](docs/images/upload.png)
-*Simple interface to paste resume and enter target job titles*
+### Main Interface
+![Main View](docs/images/main_view.png)
+*Clean interface to paste your resume, enter target job title, and optional job description*
+
+### Career Readiness Assessment
+![Career Assessment](docs/images/career_readiness_assessment.png)
+*Honest assessment with overall rating, readiness level, strengths, weaknesses, and actionable steps*
 
 ### Visual Learning Roadmap
-![Roadmap Canvas](docs/images/roadmap.png)
-*Interactive React Flow canvas with color-coded skill nodes and learning paths*
+![Visual Roadmap](docs/images/visual_roadmap.png)
+*Interactive React Flow canvas with color-coded skill nodes showing your personalized learning path*
 
 ### Skill Gap Analysis
-![Gap Analysis](docs/images/gaps.png)
-*Detailed breakdown of missing skills with priority levels and learning time estimates*
+![Skill Gaps](docs/images/skill_gaps.png)
+*Detailed breakdown of missing skills with priority levels (high/medium/low) and time estimates*
 
-### Course & Project Recommendations
-![Recommendations](docs/images/recommendations.png)
-*Specific courses, books, certifications, and hands-on projects for each skill gap*
+### Recommended Courses
+![Courses](docs/images/recommended_courses.png)
+*Curated course recommendations from top providers with direct links and duration estimates*
+
+### Project Ideas
+![Projects](docs/images/project_ideas.png)
+*Hands-on project suggestions to build portfolio and demonstrate skills to employers*
 
 ---
 
@@ -336,21 +310,20 @@ This project demonstrates:
 
 ## 💰 Estimated Costs
 
+### Local Development (Default TESTING Mode)
 | Service | Monthly Usage | Cost |
 |---------|--------------|------|
-| Bedrock Claude Opus 4.5 | ~150K tokens | $4.50 |
-| **Total (Local Dev)** | | **~$4-5/month** |
+| Bedrock Claude Haiku 3.0 | ~150K tokens | $0.50 |
+| **Total** | | **~$0.50/month** |
 
-**Future AWS Deployment:**
-| Service | Monthly Usage | Cost |
-|---------|--------------|------|
-| Cognito | 1 user | $0 (free tier) |
-| ECS Fargate | 1 task (0.25 vCPU) | $3.50 |
-| Bedrock Claude Opus 4.5 | ~150K tokens | $4.50 |
-| DynamoDB | On-demand | $0.50 |
-| S3 | ~2GB storage | $0.05 |
-| CloudFront | ~1K requests | $0.01 |
-| **Total (Deployed)** | | **~$8-9/month** |
+### Other Deployment Modes
+| Mode | Model | Monthly Cost |
+|------|-------|--------------|
+| TESTING | Haiku 3.0 | $0.50 |
+| OPTIMIZED | Mixed models | $2-3 |
+| PREMIUM | Opus 4.5 | $4-5 |
+
+**Note**: Costs assume ~50 roadmap generations per month. Actual costs depend on usage.
 
 ---
 

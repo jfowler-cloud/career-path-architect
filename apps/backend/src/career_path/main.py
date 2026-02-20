@@ -202,7 +202,7 @@ async def create_progress(roadmap_id: str, skills: list[str]):
     """Initialize progress tracking for a roadmap."""
     progress = progress_tracker.create_roadmap_progress(
         roadmap_id=roadmap_id,
-        user_id="default",  # TODO: Get from auth
+        user_id="default",  # Future: Get from auth when implemented
         skills=skills
     )
     return {
