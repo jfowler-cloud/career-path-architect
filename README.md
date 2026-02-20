@@ -120,8 +120,9 @@ cd career-path-architect/apps/backend
 # Install dependencies with uv
 uv sync
 
-# Set AWS region
+# Set AWS region and deployment mode
 export AWS_REGION=us-east-1
+export DEPLOYMENT_MODE=TESTING  # or OPTIMIZED or PREMIUM
 
 # Run FastAPI server (port 8000)
 uv run uvicorn career_path.main:app --reload
@@ -134,16 +135,30 @@ uv run uvicorn career_path.main:app --reload
 cd career-path-architect/apps/web
 
 # Install dependencies
-npm install
+pnpm install
 
 # Create environment file
 echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
 
 # Start Next.js dev server (port 3000)
-npm run dev
+pnpm run dev
 ```
 
-**Important:** Request access to Claude Opus 4.5 in [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model access before first use.
+### Quick Start with dev.sh (Recommended)
+
+```bash
+# One command to start everything
+cd career-path-architect
+./dev.sh
+```
+
+The `dev.sh` script will:
+- Check for required tools (uv, pnpm)
+- Install all dependencies
+- Set up environment files
+- Start both backend and frontend in parallel
+
+**Important:** Request access to Claude models in [Bedrock Console](https://console.aws.amazon.com/bedrock/) → Model access before first use.
 
 Open http://localhost:3000 and start building your career roadmap!
 
@@ -349,7 +364,7 @@ This project demonstrates:
 | **Output** | Infrastructure code | Learning roadmap |
 | **Canvas** | AWS service nodes | Career milestones |
 | **State** | Architecture graph | Skill gaps & progress |
-| **Development** | 5 days to MVP | 2 days to MVP |
+| **Development** | 5 days to MVP | 2 hours total (1hr MVP + 1hr polish) |
 
 ### Shared Patterns
 - ✅ LangGraph multi-agent orchestration
