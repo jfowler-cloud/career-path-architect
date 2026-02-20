@@ -28,10 +28,10 @@ The goal was to demonstrate:
 | | Resume Tailor AI | Scaffold AI | Career Path Architect |
 |---|---|---|---|
 | **Purpose** | Resume optimization | AWS architecture design | Career planning |
-| **Agents** | Step Functions workflow | 4 LangGraph agents | 5 LangGraph agents |
+| **Agents** | Step Functions workflow | 4 LangGraph agents | 6 LangGraph agents |
 | **Development** | 3 days | 1 day | 1 hour |
 | **Tests** | 212 tests, 98% | 150+ tests | 142 tests, 99% |
-| **Features** | Resume tailoring | Architecture generation | Roadmap + Progress tracking |
+| **Features** | Resume tailoring | Architecture generation | Roadmap + Critical Review |
 
 All three projects share production patterns (validation, error handling, rate limiting, testing) -- demonstrating consistent engineering practices across different problem domains.
 
@@ -77,11 +77,13 @@ An intelligent career planning platform that analyzes your resume, compares it a
 
 ### ✨ Key Features
 
-- 📄 **Resume Analysis** - Extract skills, experience, and strengths using Claude Opus 4.5
-- 🎯 **Job Description Parsing** - Analyze multiple target roles for required skills
-- 🔍 **Intelligent Gap Analysis** - Identify and prioritize skill gaps with case-insensitive matching
-- 📊 **Visual Roadmap** - Interactive React Flow canvas with color-coded nodes
-- 🎓 **Course Recommendations** - Specific courses, books, and certifications for each gap
+- 📄 **Resume Analysis** - Extract skills, experience, and strengths using Claude models
+- 🎯 **Job Description Parsing** - Analyze target roles with optional full job posting
+- 🔍 **Intelligent Gap Analysis** - Identify skill gaps with fit score (0-100%)
+- 📊 **Critical Review** - Honest assessment with strengths, weaknesses, and action steps
+- 📈 **Matched Skills** - See what you already have going for you
+- 🗺️ **Visual Roadmap** - Interactive React Flow canvas with color-coded nodes
+- 🎓 **Course Recommendations** - Specific courses, books, and certifications
 - 💻 **Project Ideas** - Hands-on projects to build missing skills
 - ⏱️ **Timeline Estimation** - Realistic learning time estimates
 - 🎨 **Interactive Canvas** - Drag, zoom, and explore your learning path
@@ -91,9 +93,11 @@ An intelligent career planning platform that analyzes your resume, compares it a
 - 💾 **Export Functionality** - Export roadmap as PNG or JSON
 - ⚡ **Response Caching** - Cache LLM responses for faster performance
 - 🔒 **Input Validation** - Comprehensive sanitization and validation
-- ⚡ **Fast Generation** - Complete roadmap in 30-60 seconds
-- 💰 **Cost-Effective** - Runs for ~$4-5/month on AWS
-- ✅ **99% Test Coverage** - 128 tests with comprehensive mocking
+- 🌙 **Dark Mode** - Toggle between light and dark themes
+- ⚡ **Deployment Modes** - TESTING (Haiku 3.0), OPTIMIZED (mixed), PREMIUM (Opus 4.5)
+- ⚡ **Fast Generation** - 20-35 seconds with TESTING mode
+- 💰 **Cost-Effective** - ~$0.50/month with TESTING mode
+- ✅ **99% Test Coverage** - 142 tests with comprehensive mocking
 
 ---
 
@@ -164,32 +168,43 @@ FastAPI Backend
 │  2. Job Parser Agent                    │
 │     - Parse job requirements            │
 │     - Extract required skills           │
+│     - Use job description if provided   │
 │                                         │
 │  3. Gap Analysis Agent                  │
 │     - Compare current vs target         │
+│     - Calculate fit score (0-100%)      │
+│     - Identify matched skills           │
 │     - Prioritize skill gaps             │
-│     - Calculate learning time           │
 │                                         │
 │  4. Learning Path Designer Agent        │
 │     - Generate course recommendations   │
 │     - Create project ideas              │
 │     - Build timeline                    │
 │                                         │
-│  5. Roadmap Generator Agent             │
+│  5. Critical Review Agent               │
+│     - Honest readiness assessment       │
+│     - Strengths and weaknesses          │
+│     - Actionable improvement steps      │
+│     - Competitive positioning           │
+│                                         │
+│  6. Roadmap Generator Agent             │
 │     - Create React Flow nodes/edges     │
 │     - Color-code by priority            │
 │     - Generate visual layout            │
 └─────────────────────────────────────────┘
         ↓
-   AWS Bedrock (Claude Opus 4.5)
+   AWS Bedrock (Claude Models)
+   - TESTING: Haiku 3.0 (fast, cheap)
+   - OPTIMIZED: Mixed models (balanced)
+   - PREMIUM: Opus 4.5 (best quality)
 ```
 
 **Tech Stack:**
-- **Frontend**: React 19 + TypeScript + Next.js 15 + React Flow
+- **Frontend**: React 19 + TypeScript + Next.js 15 + React Flow + Dark Mode
 - **Backend**: FastAPI (Python 3.12+) + LangGraph
-- **AI**: Amazon Bedrock (Claude Opus 4.5)
-- **Package Management**: uv (Python), npm (Node.js)
-- **Testing**: pytest + pytest-cov (97% coverage)
+- **AI**: Amazon Bedrock (Claude Haiku 3.0 / Sonnet 4.5 / Opus 4.5)
+- **Package Management**: uv (Python), pnpm (Node.js)
+- **Testing**: pytest + pytest-cov (99% coverage)
 - **Monorepo**: Turborepo
 
 ---
