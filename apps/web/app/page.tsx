@@ -194,7 +194,7 @@ export default function Home() {
                   >
                     <SpaceBetween size="xs">
                       {roadmapData.skill_gaps.map((gap: any, i: number) => (
-                        <div key={i} style={{
+                        <div key={`gap-${i}-${gap.skill}`} style={{
                           padding: "8px",
                           background: gap.priority === "high" ? "#fff3e0" : "#f3e5f5",
                           borderRadius: "4px"
@@ -219,7 +219,7 @@ export default function Home() {
                   >
                     <SpaceBetween size="s">
                       {roadmapData.courses.map((course: any, i: number) => (
-                        <div key={i} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
+                        <div key={`course-${i}-${course.name}`} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
                           <div><strong>{course.name}</strong></div>
                           <div style={{color: "#666"}}>{course.provider} • {course.duration}</div>
                           {course.url && (
@@ -248,7 +248,7 @@ export default function Home() {
                   >
                     <SpaceBetween size="s">
                       {roadmapData.projects.map((project: any, i: number) => (
-                        <div key={i} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
+                        <div key={`project-${i}-${project.name}`} style={{padding: "12px", background: "#f5f5f5", borderRadius: "4px"}}>
                           <div><strong>{project.name}</strong></div>
                           <div style={{marginTop: "4px"}}>{project.description}</div>
                           {project.skills && (

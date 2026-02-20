@@ -10,7 +10,6 @@ import {
   Edge,
   useNodesState,
   useEdgesState,
-  useReactFlow,
   BackgroundVariant,
   Panel,
 } from "@xyflow/react";
@@ -25,7 +24,6 @@ interface RoadmapCanvasProps {
 const RoadmapCanvas = memo(function RoadmapCanvas({ nodes, edges }: RoadmapCanvasProps) {
   const [nodesState, setNodes, onNodesChange] = useNodesState(nodes);
   const [edgesState, setEdges, onEdgesChange] = useEdgesState(edges);
-  const { getNodes } = useReactFlow();
 
   useEffect(() => {
     setNodes(nodes);
@@ -57,7 +55,7 @@ const RoadmapCanvas = memo(function RoadmapCanvas({ nodes, edges }: RoadmapCanva
 
   const downloadJSON = useCallback(() => {
     const data = {
-      nodes: getNodes(),
+      nodes: nodesState,
       edges: edgesState,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -67,7 +65,7 @@ const RoadmapCanvas = memo(function RoadmapCanvas({ nodes, edges }: RoadmapCanva
     a.setAttribute('href', url);
     a.click();
     URL.revokeObjectURL(url);
-  }, [getNodes, edgesState]);
+  }, [nodesState, edgesState]);
 
   return (
     <div style={{ width: "100%", height: "600px", border: "1px solid #ddd", borderRadius: "8px" }}>
