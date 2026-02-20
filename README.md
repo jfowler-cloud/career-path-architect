@@ -373,44 +373,9 @@ MIT License - see LICENSE file for details.
 
 ---
 
-## 💭 Personal Note
-
-> "This tool demonstrates what's possible with AI-assisted development in 2026. Building a production-quality multi-agent system with 142 tests and 99% coverage in just 1 hour showcases the extreme velocity achievable when combining modern frameworks (LangGraph, FastAPI, React Flow) with AI pair programming. The goal isn't just speed -- it's maintaining production quality, security, and comprehensive testing while moving fast."
-
----
-
-**Built with ❤️ and AI to help professionals navigate their career growth**
-| DynamoDB | On-demand | $0.50 |
-| S3 | ~2GB storage | $0.05 |
-| CloudFront | ~1K requests | $0.01 |
-| **Total** | | **~$8-9/month** |
-
----
-
-## 🎨 Key Differentiators
-
-### vs Scaffold AI
-| Feature | Scaffold AI | Career Path Architect |
-|---------|-------------|----------------------|
-| **Purpose** | AWS architecture design | Career planning |
-| **Agents** | 4 (Interpreter, Architect, Security, Code Gen) | 6 (Resume, Job, Gap, Learning, Market, Roadmap) |
-| **Output** | Infrastructure code | Learning roadmap |
-| **Canvas** | AWS service nodes | Career milestones |
-| **State** | Architecture graph | Progress tracking |
-
-### Shared Patterns
-- ✅ LangGraph multi-agent orchestration
-- ✅ React Flow visual canvas
-- ✅ AWS Cloudscape UI
-- ✅ FastAPI backend
-- ✅ Bedrock Claude integration
-- ✅ Security-first design
-
----
-
 ## 🤝 Contributing
 
-This project is currently in planning phase. Contributions will be welcome once the MVP is complete.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
