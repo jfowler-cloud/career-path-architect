@@ -11,10 +11,14 @@ import boto3
 from langchain_aws import ChatBedrock
 
 from ..graph.state import CareerPathState
-from ..constants import MODEL_ID, MAX_TOKENS, TEMPERATURE, MAX_RESUME_LENGTH, MAX_SKILL_GAPS
+from ..constants import MAX_TOKENS, TEMPERATURE, MAX_RESUME_LENGTH, MAX_SKILL_GAPS
 from ..utils import deduplicate_skills, calculate_priority, estimate_learning_time
+from ..model_config import get_model_config
 
 logger = logging.getLogger(__name__)
+
+# Get model configuration based on deployment mode
+MODEL_CONFIG = get_model_config(os.getenv("DEPLOYMENT_MODE", "TESTING"))
 
 # Cache bedrock client
 _bedrock_client = None
@@ -32,10 +36,12 @@ def _get_bedrock_client():
     return _bedrock_client
 
 
-def _get_llm():
-    """Get configured LLM instance."""
+def _get_llm(agent_name: str):
+    """Get configured LLM instance for specific agent."""
+    model_id = getattr(MODEL_CONFIG, agent_name)
+    logger.info(f"Using model {model_id} for {agent_name}")
     return ChatBedrock(
-        model_id=MODEL_ID,
+        model_id=model_id,
         client=_get_bedrock_client(),
         model_kwargs={
             "max_tokens": MAX_TOKENS,
@@ -78,7 +84,7 @@ Return JSON:
 {{"skills": ["..."], "experience": {{"category": years}}, "strengths": ["..."]}}"""
     
     try:
-        response = _get_llm().invoke(prompt)
+        response = _get_llm("resume_analyzer").invoke(prompt)
         result = _extract_json(response.content)
         
         logger.info(f"Extracted {len(result.get('skills', []))} skills")
@@ -130,7 +136,7 @@ Return JSON:
 {{"required": ["..."], "nice_to_have": ["..."]}}"""
         
         try:
-            response = _get_llm().invoke(prompt)
+            response = _get_llm("job_parser").invoke(prompt)
             result = _extract_json(response.content)
             
             required_skills[job_title] = result.get("required", [])
@@ -219,7 +225,7 @@ Return JSON:
 {{"courses": [{{"name": "...", "provider": "...", "url": "...", "duration": "..."}}], "projects": [{{"name": "...", "description": "...", "skills": ["..."]}}], "certifications": [{{"name": "...", "provider": "...", "url": "..."}}]}}"""
     
     try:
-        response = _get_llm().invoke(prompt)
+        response = _get_llm("learning_path").invoke(prompt)
         result = _extract_json(response.content)
         
         logger.info(f"Generated {len(result.get('courses', []))} course recommendations")
@@ -274,7 +280,7 @@ Provide critical analysis in JSON:
 Be direct and constructive. Return ONLY valid JSON."""
     
     try:
-        response = _get_llm().invoke(prompt)
+        response = _get_llm("critical_review").invoke(prompt)
         result = _extract_json(response.content)
         
         logger.info(f"Critical review complete: {result.get('overallRating', 0)}/10")

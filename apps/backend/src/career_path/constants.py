@@ -1,7 +1,6 @@
 """Constants for career path workflow."""
 
-# Model configuration
-MODEL_ID = "us.anthropic.claude-3-5-sonnet-20241022-v2:0"
+# Model configuration (now in model_config.py)
 MAX_TOKENS = 2000
 TEMPERATURE = 0.3
 
