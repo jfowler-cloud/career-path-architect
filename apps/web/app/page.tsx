@@ -169,10 +169,10 @@ export default function Home() {
                 </Header>
               }
             >
-              <SpaceBetween size="m">
-                {error && <Alert type="error" key="error-alert">{error}</Alert>}
+              <div>
+                {error && <Alert type="error">{error}</Alert>}
                 
-                <div key="example-button" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: error ? "16px" : "0" }}>
                   <div>
                     <strong>Try it out:</strong>
                   </div>
@@ -182,59 +182,59 @@ export default function Home() {
                 </div>
 
                 <Textarea
-                  key="resume-input"
                   label="Resume"
                   placeholder="Paste your resume here..."
                   value={resumeText}
                   onChange={({ detail }) => setResumeText(detail.value)}
                   rows={10}
+                  style={{marginTop: "16px"}}
                 />
 
                 <Input
-                  key="job-title-input"
                   label="Target Job Title"
                   placeholder="e.g., Senior Cloud Architect"
                   value={targetJob}
                   onChange={({ detail }) => setTargetJob(detail.value)}
+                  style={{marginTop: "16px"}}
                 />
 
                 <Textarea
-                  key="job-desc-input"
                   label="Job Description (Optional)"
                   description="Paste the full job posting for more accurate gap analysis"
                   placeholder="Paste job description here for detailed requirements analysis..."
                   value={jobDescription}
                   onChange={({ detail }) => setJobDescription(detail.value)}
                   rows={6}
+                  style={{marginTop: "16px"}}
                 />
 
                 <Textarea
-                  key="specialty-input"
                   label="Additional Context (Optional)"
                   description="Any specific areas of focus, career goals, or constraints"
                   placeholder="e.g., Focus on cloud-native technologies, interested in leadership track, prefer remote-friendly skills..."
                   value={specialtyInfo}
                   onChange={({ detail }) => setSpecialtyInfo(detail.value)}
                   rows={3}
+                  style={{marginTop: "16px"}}
                 />
 
                 <Button
-                  key="generate-button"
                   variant="primary"
                   onClick={handleGenerate}
                   loading={loading}
                   disabled={!resumeText || !targetJob}
                   loadingText="Generating roadmap..."
+                  style={{marginTop: "16px"}}
                 >
                   Generate Roadmap
                 </Button>
                 
                 {loading && (
-                  <Alert type="info" key="loading-alert">
+                  <Alert type="info" style={{marginTop: "16px"}}>
                     This may take 30-60 seconds. AI is analyzing your resume and generating recommendations...
                   </Alert>
                 )}
-              </SpaceBetween>
+              </div>
             </Container>
 
             {roadmapData && (
