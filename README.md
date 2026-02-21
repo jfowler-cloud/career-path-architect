@@ -237,7 +237,7 @@ FastAPI Backend
 
 ## 🧪 Testing
 
-**99% Test Coverage** with 128 comprehensive tests:
+**99% Test Coverage** with 142 comprehensive tests:
 
 ```bash
 cd apps/backend
@@ -249,11 +249,12 @@ uv run pytest tests/ --cov=src/career_path --cov-report=term-missing
 - `test_health.py` - 5 tests (100% coverage) - Health checks
 - `test_nodes.py` - 17 tests (99% coverage) - LangGraph agents
 - `test_workflow.py` - 2 tests (100% coverage) - Workflow creation
-- `test_main.py` - 28 tests (95% coverage) - FastAPI endpoints
+- `test_main.py` - 29 tests (95% coverage) - FastAPI endpoints
 - `test_progress.py` - 14 tests (100% coverage) - Progress tracking
-- `test_comparison.py` - 15 tests (100% coverage) - Path comparison
-- `test_cache.py` - 19 tests (100% coverage) - Response caching
+- `test_comparison.py` - 13 tests (100% coverage) - Path comparison
+- `test_cache.py` - 16 tests (100% coverage) - Response caching
 - `test_validation.py` - 30 tests (100% coverage) - Input validation
+- `test_rate_limit.py` - 13 tests (100% coverage) - Rate limiting
 
 See [TEST_COVERAGE.md](TEST_COVERAGE.md) for detailed coverage report.
 
@@ -261,7 +262,7 @@ See [TEST_COVERAGE.md](TEST_COVERAGE.md) for detailed coverage report.
 
 ## 📊 Development Timeline
 
-### ✅ Complete Project (1 Hour Total)
+### ✅ Complete Project (2 Hours Total)
 - [x] FastAPI backend with health checks
 - [x] LangGraph multi-agent workflow (5 agents)
 - [x] Resume analyzer, job parser, gap analysis agents
@@ -340,7 +341,7 @@ This project demonstrates:
 | **Output** | Infrastructure code | Learning roadmap |
 | **Canvas** | AWS service nodes | Career milestones |
 | **State** | Architecture graph | Skill gaps & progress |
-| **Development** | 5 days to MVP | 2 hours total (1hr MVP + 1hr polish) |
+| **Development** | 1 day | 2 hours total (1hr MVP + 1hr polish) |
 
 ### Shared Patterns
 - ✅ LangGraph multi-agent orchestration
@@ -349,30 +350,6 @@ This project demonstrates:
 - ✅ Bedrock Claude integration
 - ✅ Comprehensive testing
 - ✅ Rapid development workflow
-
----
-
-## 🤝 Contributing
-
-This project is currently in MVP phase. Contributions welcome! Please open an issue first to discuss proposed changes.
-
----
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
-
----
-
-## 👤 Author
-
-**James Fowler**
-- GitHub: [@jfowler-cloud](https://github.com/jfowler-cloud)
-- LinkedIn: [James Fowler - AWS Cloud Architect & DevOps Professional](https://www.linkedin.com/in/james-fowler-aws-cloud-architect-dev-ops-professional/)
-
-**Other Projects:**
-- [Resume Tailor AI](https://github.com/jfowler-cloud/resume-tailor-ai) - AI-powered resume optimization
-- [Scaffold AI](https://github.com/jfowler-cloud/scaffold-ai) - AI-powered AWS architecture designer
 
 ---
 
