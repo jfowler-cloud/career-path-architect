@@ -353,6 +353,55 @@ This project demonstrates:
 
 ---
 
+## 🚀 Recent Updates
+
+### v1.3.0 - Polish & Production Readiness (Feb 2026)
+- ✨ Added logo with map pin/destination marker design
+- ✨ Added dark mode toggle with improved button visibility
+- ✨ Added `TESTING/OPTIMIZED/PREMIUM` deployment modes
+- 🐛 Fixed React key prop warnings across all Container and SpaceBetween components
+- 🐛 Fixed React hydration warnings
+- 📝 Updated demo instructions with new features
+- 📝 Fixed development timeline and added `dev.sh` quick start
+- 🔧 Updated GitHub Actions workflow
+- 🔧 Made security scans non-blocking in CI
+- 📦 **Dependency Updates:**
+  - Bumped actions/checkout from 4 to 6
+  - Bumped github/codeql-action from 3 to 4
+
+### v1.2.0 - Critical Review & Enhanced Analysis (Feb 2026)
+- ✨ Added Resume Tailor-style critical review and fit analysis
+- ✨ Added optional job description and specialty info fields
+- ✨ Added career path comparison feature
+- ✨ Added progress tracking system
+- ✨ Added response caching for improved performance
+- ✨ Added comprehensive input validation and sanitization
+- ✨ Added rate limiting for API protection
+- 🐛 Fixed botocore[crt] dependency and Bedrock health check
+- 🐛 Deduplicated skill gaps and resolved React warnings
+- 📝 Added demo resume and comprehensive testing instructions
+- 🔒 Added pre-commit hooks for security scanning
+
+### v1.1.0 - Quality & Testing (Feb 2026)
+- ✨ Added comprehensive test suite (142 tests, 99% coverage)
+- ✨ Added color coding to roadmap nodes
+- ✨ Added loading indicator with status messages
+- ⚡ Cached Bedrock client for improved performance
+- ⚡ Optimized prompts for faster responses
+- ⚡ Frontend performance improvements
+- 🔧 Extracted constants and utility functions for maintainability
+- 📝 Added comprehensive API documentation
+
+### v1.0.0 - Initial Release (Feb 2026)
+- 🎉 LangGraph multi-agent workflow with 5 specialized agents
+- 🎉 Interactive React Flow career roadmap canvas
+- 🎉 Resume analysis and skill gap identification
+- 🎉 Learning path generation with courses and projects
+- 🎉 FastAPI backend with health checks
+- 🎉 Next.js 15 frontend with Cloudscape Design
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
