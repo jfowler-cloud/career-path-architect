@@ -17,8 +17,8 @@ importers:
   apps/web:
     dependencies:
       '@cloudscape-design/components':
-        specifier: ^3.0.1203
-        version: 3.0.1207(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^3.0.1213
+        version: 3.0.1213(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@cloudscape-design/global-styles':
         specifier: ^1.0.30
         version: 1.0.50
@@ -70,8 +70,8 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
-  '@cloudscape-design/components@3.0.1207':
-    resolution: {integrity: sha512-7cTx2erTJg0RZOvCA+KzTjz8NnM5cxoamK8/pNNiH5glq3jmQG+PRtbDrwyG5dzJ6Ypf0/dpnezBe483BZuXPQ==}
+  '@cloudscape-design/components@3.0.1213':
+    resolution: {integrity: sha512-3L83bXbkIcpxbR66twO/bkOVV39V4RScKwIkypQ8zX8NKCjUW35q+g0TXCL1Sakr3W1apxKvaGPSpqYhBSK/BA==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -81,8 +81,8 @@ packages:
   '@cloudscape-design/test-utils-core@1.0.71':
     resolution: {integrity: sha512-4rXQlsd6Rdg+KCNoltLa1+0wjgNugbduuK7L4nTa/Aw/gJIYqrTU78ip5A2VmbDhiE6fiGqtCFmU6LcKCMP//A==}
 
-  '@cloudscape-design/theming-runtime@1.0.92':
-    resolution: {integrity: sha512-sFIAHIbpe5Au4XUlxqL5B4TVXhtrlta7M2s5At70O5hD11EyXqKjACa1F96PDd6AvEaqvn9DDnoZRa2pUJ8j4Q==}
+  '@cloudscape-design/theming-runtime@1.0.94':
+    resolution: {integrity: sha512-3/TTwcf7afZ9LhjgCkL5qPFCI9JOBtxk913Xl4fmC7gQYD+NMvBK1anSDC8SlPYLSap2rkhfNi94Hk77NkkCLQ==}
 
   '@dnd-kit/accessibility@3.1.1':
     resolution: {integrity: sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==}
@@ -535,11 +535,6 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-keyed-flatten-children@2.2.1:
-    resolution: {integrity: sha512-6yBLVO6suN8c/OcJk1mzIrUHdeEzf5rtRVBhxEXAHO49D7SlJ70cG4xrSJrBIAG7MMeQ+H/T151mM2dRDNnFaA==}
-    peerDependencies:
-      react: '>=15.0.0'
-
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
     peerDependencies:
@@ -683,12 +678,12 @@ snapshots:
       tslib: 2.8.1
       weekstart: 2.0.0
 
-  '@cloudscape-design/components@3.0.1207(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@cloudscape-design/components@3.0.1213(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@cloudscape-design/collection-hooks': 1.0.82(react@19.2.4)
       '@cloudscape-design/component-toolkit': 1.0.0-beta.138(react@19.2.4)
       '@cloudscape-design/test-utils-core': 1.0.71
-      '@cloudscape-design/theming-runtime': 1.0.92
+      '@cloudscape-design/theming-runtime': 1.0.94
       '@dnd-kit/core': 6.3.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       '@dnd-kit/utilities': 3.2.2(react@19.2.4)
@@ -699,7 +694,7 @@ snapshots:
       intl-messageformat: 10.7.18
       mnth: 2.0.0
       react: 19.2.4
-      react-keyed-flatten-children: 2.2.1(react@19.2.4)
+      react-is: 18.3.1
       react-transition-group: 4.4.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       tslib: 2.8.1
       weekstart: 1.1.0
@@ -713,7 +708,7 @@ snapshots:
       css-selector-tokenizer: 0.8.0
       css.escape: 1.5.1
 
-  '@cloudscape-design/theming-runtime@1.0.92':
+  '@cloudscape-design/theming-runtime@1.0.94':
     dependencies:
       '@material/material-color-utilities': 0.3.0
       tslib: 2.8.1
@@ -1106,11 +1101,6 @@ snapshots:
   react-is@16.13.1: {}
 
   react-is@18.3.1: {}
-
-  react-keyed-flatten-children@2.2.1(react@19.2.4):
-    dependencies:
-      react: 19.2.4
-      react-is: 18.3.1
 
   react-transition-group@4.4.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
