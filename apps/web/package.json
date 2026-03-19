@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@cloudscape-design/components": "^3.0.1203",
-    "@cloudscape-design/global-styles": "^1.0.30",
+    "@cloudscape-design/global-styles": "^1.0.52",
     "@xyflow/react": "^12.3.5",
     "html-to-image": "^1.11.13",
     "next": "^15.1.6",
